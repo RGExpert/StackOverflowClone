@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface AnswerRepository extends CrudRepository<Answer,Long> {
 
-    @Query(value = "SELECT DISTINCT * FROM answer where q_id = :id")
+    @Query(value = "SELECT DISTINCT * from answer where q_id = :id",nativeQuery = true)
     List<Answer> findAnswersByQuestionId(@Param("id") Long id);
 }
