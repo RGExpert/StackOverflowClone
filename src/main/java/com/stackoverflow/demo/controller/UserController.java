@@ -17,7 +17,7 @@ public class UserController {
     @GetMapping("/getAll")
     @ResponseBody
     public List<User> getAllUsers(){
-        return (List<User>) this.userService.getAllUsers();
+        return this.userService.getAllUsers();
     }
 
     @GetMapping("/getById/{id}")
@@ -32,7 +32,7 @@ public class UserController {
         return this.userService.addUser(user);
     }
 
-    @PostMapping("/updateUser")
+    @PutMapping("/updateUser")
     @ResponseBody
     public User updateUser(@RequestBody User user){
         return this.userService.updateUser(user,user.getUserId());
