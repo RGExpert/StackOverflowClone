@@ -1,7 +1,6 @@
 package com.stackoverflow.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +13,7 @@ import java.sql.Timestamp;
 public class User {
     @Id
     @Column(name = "u_id")
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     @ManyToOne

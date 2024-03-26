@@ -2,6 +2,7 @@ package com.stackoverflow.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Generated;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class Answer {
 
     @Id
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "a_id")
     private Long answerId;
 

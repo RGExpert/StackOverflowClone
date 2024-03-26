@@ -27,8 +27,8 @@ public class QuestionService {
         return this.questionRepository.save(question);
     }
 
-    public Question updateQuestion(Question question, Long id){
-        Optional<Question> questionDb = this.questionRepository.findById(id);
+    public Question updateQuestion(Question question){
+        Optional<Question> questionDb = this.questionRepository.findById(question.getQId());
         if(questionDb.isPresent()){
             Question questionToUpdate = questionDb.get();
 
@@ -47,7 +47,7 @@ public class QuestionService {
     public String deleteQuestionById(Long id){
         try {
             this.questionRepository.deleteById(id);
-            return "Scuccessfully deleted";
+            return "Successfully deleted";
         } catch (Exception e) {
             return "Delete failed";
         }

@@ -42,7 +42,7 @@ public class AnswerService {
 
     public String deleteAnswerById(Long id){
         try {
-            this.deleteAnswerById(id);
+            this.answerRepository.deleteById(id);
             return "Successfully deleted";
         } catch (Exception e) {
             return "Deletion failed";

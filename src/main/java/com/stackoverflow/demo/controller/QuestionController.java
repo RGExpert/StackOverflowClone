@@ -5,6 +5,7 @@ import com.stackoverflow.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Console;
 import java.util.List;
 
 @RestController
@@ -33,8 +34,9 @@ public class QuestionController {
 
     @PutMapping("/updateQuestion")
     @ResponseBody
-    public Question updateQuestion(Question question){
-        return this.questionService.updateQuestion(question,question.getQuestionId());
+    public Question updateQuestion(@RequestBody Question question){
+        System.out.println(question.getQId());
+        return this.questionService.updateQuestion(question);
     }
 
     @DeleteMapping("/deleteQuestion")
