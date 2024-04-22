@@ -1,0 +1,15 @@
+.profile-wrapper, .card-wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  width: 100vw;
+}
+
+.card-wrapper {
+  height: 10rem;
+  width: 20rem;
+}
+
+
+

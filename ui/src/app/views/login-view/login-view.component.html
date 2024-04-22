@@ -1,0 +1,24 @@
+<div class="login-wrapper">
+  <mat-card class="login-form">
+
+    <form class="login-form" (submit)="login()">
+      <mat-card-header>
+        <mat-card-title>Login</mat-card-title>
+      </mat-card-header>
+
+      <mat-form-field class="form-field">
+        <mat-label>Username</mat-label>
+        <input matInput type="text" [(ngModel)]="username" name="username" required>
+      </mat-form-field>
+
+      <mat-form-field class="form-field">
+        <mat-label>Password</mat-label>
+        <input matInput type="{{ hide ? 'password' : 'text' }}" [(ngModel)]="password" name="password" required>
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+          <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+      <button mat-button color="primary" type="submit" class="form-button">Login</button>
+    </form>
+  </mat-card>
+</div>

@@ -1,0 +1,16 @@
+import { Routes } from '@angular/router';
+import {LoginViewComponent} from "./views/login-view/login-view.component";
+import {HomeViewComponent} from "./views/home-view/home-view.component";
+import {UserViewComponent} from "./views/user-view/user-view.component";
+import {QuestionsViewComponent} from "./views/questions-view/questions-view.component";
+import {QuestionViewComponent} from "./views/question-view/question-view.component";
+
+export const routes: Routes = [
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  {path: 'login', component: LoginViewComponent, pathMatch: 'full'},
+  {path:'home', component: HomeViewComponent, pathMatch: 'full'},
+  {path:'user/:userId', component: UserViewComponent, pathMatch: 'full'},
+  {path: 'questions', component: QuestionsViewComponent, pathMatch:'full'},
+  {path: 'questions/:qId', component: QuestionViewComponent, pathMatch:'full'},
+];
+
