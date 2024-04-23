@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from "@angular/forms";
 import {CommonModule} from "@angular/common";
+import {AnswerDialogComponent} from "./components/answer-dialog/answer-dialog.component";
 
 
 @Component({
@@ -11,6 +12,7 @@ import {CommonModule} from "@angular/common";
       RouterOutlet,
       FormsModule,
       CommonModule,
+      AnswerDialogComponent
       ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

@@ -4,7 +4,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatCardModule} from "@angular/material/card";
 import {ActivatedRoute} from "@angular/router";
 import {User} from "../../models/user";
-import mockData from "../../constants/mock-data";
+import mockData from "../../mockdata/mock-data";
 
 
 @Component({
@@ -20,6 +20,8 @@ export class UserViewComponent implements OnInit{
   username: string | null = null;
   id: number | null = null;
   joinDate: string | null = null;
+
+  currentUser : User | null = null;
   constructor(private route: ActivatedRoute) { }
   ngOnInit(): void {
     const userIdString = localStorage.getItem('userId');
@@ -31,10 +33,7 @@ export class UserViewComponent implements OnInit{
 
     if (this.userId != null) {
       const userIdNumber = parseInt(this.userId, 10);
-      const userData = mockData.getUserWithoutPassword(userIdNumber);
-      if (userData) {
-        ({ id: this.id, username: this.username, joinDate: this.joinDate } = userData);
-      }
+      this.currentUser = mockData.getUserWithoutPassword(userIdNumber) as User;
     }
 
   }

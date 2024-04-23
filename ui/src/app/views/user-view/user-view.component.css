@@ -1,4 +1,4 @@
-.profile-wrapper, .card-wrapper{
+.profile-wrapper{
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,6 +7,9 @@
 }
 
 .card-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 10rem;
   width: 20rem;
 }

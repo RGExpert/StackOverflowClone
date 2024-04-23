@@ -5,7 +5,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {FormsModule} from "@angular/forms";
-import mockData from "../../constants/mock-data";
+import mockData from "../../mockdata/mock-data";
 import {Router} from "@angular/router";
 import {User} from "../../models/user";
 
@@ -33,6 +33,7 @@ export class LoginViewComponent {
     // Your login logic here
     console.log('Username:', this.username);
     console.log('Password:', this.password);
+
     const user: User | undefined = mockData.users.find(u => u.username === this.username && u.password === this.password);
     if (user) {
       this.router.navigate(['/home']);

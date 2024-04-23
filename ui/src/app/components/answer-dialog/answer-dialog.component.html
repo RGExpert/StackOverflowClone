@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Add an answer</h2>
+<mat-dialog-content>
+    <textarea class="dialog-textarea"
+              style="resize: none;width: 25rem;height: 20rem;"
+              matInput [(ngModel)]="data">
+    </textarea>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Never mind</button>
+  <button mat-button (click)="onSubmit()">Submit</button>
+</mat-dialog-actions>

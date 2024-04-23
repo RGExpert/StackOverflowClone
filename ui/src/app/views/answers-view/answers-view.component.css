@@ -1,0 +1,23 @@
+.question-card{
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+}
+
+.pointer {
+  color: blue;
+  cursor: pointer;
+}
+
+.pointer:hover {
+  color: darkblue;
+}
+
+.delete-button{
+  margin-left: 20rem;
+}
+
+.question-image{
+  max-height: 200px;
+  max-width: 200px;
+}
+
