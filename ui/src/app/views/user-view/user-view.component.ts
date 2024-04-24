@@ -33,7 +33,7 @@ export class UserViewComponent implements OnInit{
 
     if (this.userId != null) {
       const userIdNumber = parseInt(this.userId, 10);
-      this.currentUser = mockData.getUserWithoutPassword(userIdNumber) as User;
+      this.currentUser = <User>mockData.users.find(u => u.id ==userIdNumber);
     }
 
   }

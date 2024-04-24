@@ -13,6 +13,7 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {QuestionDialogComponent} from "../../components/question-dialog/question-dialog.component";
+import {QuestionCardComponent} from "../../components/question-card/question-card.component";
 
 @Component({
   selector: 'app-questions-view',
@@ -21,7 +22,8 @@ import {QuestionDialogComponent} from "../../components/question-dialog/question
     MatCardModule,
     MatButtonModule,
     CommonModule,
-    MatIconModule
+    MatIconModule,
+    QuestionCardComponent
   ],
   templateUrl: './questions-view.component.html',
   styleUrl: './questions-view.component.css'

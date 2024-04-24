@@ -54,15 +54,5 @@ let mockData = {
       "creationDate": "21/04/2024"
     },
   ],
-
-  getUserWithoutPassword(userId: number) {
-    const user = this.users.find(u => u.id === userId);
-    if (user) {
-      return { id: user.id, username: user.username, joinDate: user.joinDate};
-    } else {
-      return null;
-    }
-  }
-
 };
 export default mockData;

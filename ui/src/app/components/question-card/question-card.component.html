@@ -1,0 +1,32 @@
+<!--
+<mat-card  class="question-card">
+  <img [src]="question.path" alt="Question Image" class="question-image">
+  <mat-card-header>
+    <mat-card-title>{{ question.title }}</mat-card-title>
+    <mat-card-subtitle>{{ question.creationDate }}</mat-card-subtitle>
+    <div class="delete-button">
+      <button *ngIf="question.authorId === currentUser" mat-icon-button (click)="deleteQuestion(question)">
+        <mat-icon>close</mat-icon>
+      </button>
+
+      <button *ngIf="question.authorId === currentUser" mat-icon-button (click)="updateQuestion(question)">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+  </mat-card-header>
+  <mat-card-content>
+    <p>{{ question.text }}</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button>
+      <mat-icon>thumb_up</mat-icon>
+    </button>
+    <button mat-button>
+      <mat-icon>thumb_down</mat-icon>
+    </button>
+    <button mat-button (click)="navigateToQuestion(question.qId)">
+      <mat-icon>chat_bubble</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>
+-->
