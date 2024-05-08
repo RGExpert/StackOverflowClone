@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class Answer {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "a_id")
     private Long answerId;
 

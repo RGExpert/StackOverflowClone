@@ -5,7 +5,6 @@ import com.stackoverflow.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Console;
 import java.util.List;
 
 @RestController
@@ -14,7 +13,7 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
-    @GetMapping("/getAll") // Specify the path directly here
+    @GetMapping("/getAll")
     @ResponseBody
     public List<Question> getAllQuestions(){
         return this.questionService.getAllQuestions();

@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 public class User {
     @Id
     @Column(name = "u_id")
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     @ManyToOne
