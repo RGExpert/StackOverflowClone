@@ -30,7 +30,6 @@ export class LoginViewComponent {
   constructor(private router: Router) { }
 
   login() {
-    // Your login logic here
     console.log('Username:', this.username);
     console.log('Password:', this.password);
 

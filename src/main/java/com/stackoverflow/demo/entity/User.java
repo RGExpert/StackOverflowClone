@@ -1,5 +1,6 @@
 package com.stackoverflow.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class User {
     @Column(name = "user_name")
     private String userName;
 
+    //@JsonIgnore
     @Column(name = "password")
     private String password;
 

@@ -4,6 +4,8 @@ import com.stackoverflow.demo.entity.User;
 import com.stackoverflow.demo.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +16,14 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+
     public List<User> getAllUsers(){
         return (List<User>) this.userRepository.findAll();
+    }
+
+    public User getByUsername(String username){
+        Optional<User> user = this.userRepository.findByUserName(username);
+        return user.orElse(null);
     }
 
     public User getUserById(Long id){

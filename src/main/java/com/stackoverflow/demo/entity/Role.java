@@ -1,13 +1,12 @@
 package com.stackoverflow.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "role")
-@Data
-@NoArgsConstructor
+@Setter
+@Getter
 public class Role {
     @Id
     @Column(name = "r_id")
@@ -17,4 +16,19 @@ public class Role {
     @Column(name = "role_name")
     private String roleName;
 
+    public Role(Long roleId, String roleName) {
+        this.roleId = roleId;
+        this.roleName = roleName;
+    }
+
+    public Role() {
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "roleId=" + roleId +
+                ", roleName='" + roleName + '\'' +
+                '}';
+    }
 }

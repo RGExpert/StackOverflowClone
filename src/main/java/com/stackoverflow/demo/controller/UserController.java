@@ -26,6 +26,12 @@ public class UserController {
         return this.userService.getUserById(id);
     }
 
+    @GetMapping("/getByUserName/{username}")
+    @ResponseBody
+    public User getUserById(@PathVariable String username){
+        return this.userService.getByUsername(username);
+    }
+
     @PostMapping("/addUser")
     @ResponseBody
     public User addUser(@RequestBody User user){
@@ -37,6 +43,8 @@ public class UserController {
     public User updateUser(@RequestBody User user){
         return this.userService.updateUser(user,user.getUserId());
     }
+
+
 
     @DeleteMapping("/deleteUser")
     @ResponseBody
