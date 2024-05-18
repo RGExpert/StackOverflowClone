@@ -3,6 +3,9 @@ import { RouterOutlet } from '@angular/router';
 import { FormsModule } from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {AnswerDialogComponent} from "./components/answer-dialog/answer-dialog.component";
+import {HttpClientModule} from "@angular/common/http";
+import {BrowserAnimationsModule, NoopAnimationsModule} from "@angular/platform-browser/animations";
+import {NoopAnimationDriver} from "@angular/animations/browser";
 
 
 @Component({
@@ -12,7 +15,8 @@ import {AnswerDialogComponent} from "./components/answer-dialog/answer-dialog.co
       RouterOutlet,
       FormsModule,
       CommonModule,
-      AnswerDialogComponent
+      AnswerDialogComponent,
+      HttpClientModule,
       ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

@@ -20,13 +20,13 @@ let mockData = {
   "users": [
     {
       "id": 1,
-      "username": "test",
+      "userName": "test",
       "password": "test",
       "joinDate": "04/11/2002"
     },
     {
       "id": 2,
-      "username": "helper",
+      "userName": "helper",
       "password": "helper",
       "joinDate": "01/11/2006"
     }

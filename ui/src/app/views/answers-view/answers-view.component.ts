@@ -54,12 +54,12 @@ export class AnswersViewComponent implements OnInit{
 
   getUserNameAnswer(authorId: number): string {
     const user = mockData.users.find(u => u.id === authorId);
-    return user ? user.username : 'Deleted User';
+    return user ? user.userName : 'Deleted User';
   }
 
   getUserNameQuestion(authorId: number | undefined): string {
     const user = mockData.users.find(u => u.id === authorId);
-    return user ? user.username : 'Deleted User';
+    return user ? user.userName : 'Deleted User';
   }
 
   goToUserPage(authorId: number | undefined) {

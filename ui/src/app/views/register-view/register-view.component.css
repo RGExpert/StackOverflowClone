@@ -1,0 +1,21 @@
+.register-wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.register-form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-field{
+  width: 90%;
+}
+
+.form-button{
+  margin-bottom: 1rem ;
+}

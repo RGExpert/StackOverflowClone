@@ -64,6 +64,10 @@
               "buildTarget": "ui:build:development"
             }
           },
+          "options": {
+            "buildTarget": "ui:build",
+            "proxyConfig": "proxy.conf.json"
+          },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {

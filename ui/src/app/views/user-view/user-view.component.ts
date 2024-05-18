@@ -17,7 +17,7 @@ import mockData from "../../mockdata/mock-data";
 export class UserViewComponent implements OnInit{
 
   userId: string | null = null;
-  username: string | null = null;
+  userName: string | null = null;
   id: number | null = null;
   joinDate: string | null = null;
 

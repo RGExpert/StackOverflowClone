@@ -5,9 +5,8 @@ import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {FormsModule} from "@angular/forms";
-import mockData from "../../mockdata/mock-data";
 import {Router} from "@angular/router";
-import {User} from "../../models/user";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-login-view',
@@ -18,7 +17,8 @@ import {User} from "../../models/user";
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    FormsModule],
+    FormsModule,
+  ],
   templateUrl: './login-view.component.html',
   styleUrl: './login-view.component.css'
 })
@@ -27,18 +27,29 @@ export class LoginViewComponent {
   hide = true;
   username: string = '';
   password: string = '';
-  constructor(private router: Router) { }
+  sessionToken: any = ""
+  constructor(
+    private router: Router,
+    private http: HttpClient
+  ) { }
 
-  login() {
-    console.log('Username:', this.username);
-    console.log('Password:', this.password);
-
-    const user: User | undefined = mockData.users.find(u => u.username === this.username && u.password === this.password);
-    if (user) {
-      this.router.navigate(['/home']);
-      localStorage.setItem('userId', user.id.toString());
-    } else {
-      console.log('Authentication failed. Invalid username or password.');
-    }
+  login(){
+    let url = 'http://localhost:8080/auth/login'
+    this.http.
+    post<any>(url,{
+      username: this.username,
+      password: this.password
+    }).subscribe(res =>{
+      if(res){
+        this.sessionToken = res.accessToken
+        sessionStorage.setItem(
+          'token',
+          this.sessionToken
+        );
+        this.router.navigate(['/home']);
+      } else {
+        console.log("Authentication failed"); // Maybe do something else here
+      }
+    })
   }
 }
