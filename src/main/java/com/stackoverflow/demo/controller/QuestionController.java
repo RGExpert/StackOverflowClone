@@ -34,7 +34,7 @@ public class QuestionController {
     @PutMapping("/updateQuestion")
     @ResponseBody
     public Question updateQuestion(@RequestBody Question question){
-        System.out.println(question.getQId());
+        //System.out.println(question.getQId());
         return this.questionService.updateQuestion(question);
     }
 

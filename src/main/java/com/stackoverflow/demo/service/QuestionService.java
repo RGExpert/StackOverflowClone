@@ -33,11 +33,12 @@ public class QuestionService {
             Question questionToUpdate = questionDb.get();
 
             questionToUpdate.setText(question.getText());
-            questionToUpdate.setTitle(question.getText());
-            questionToUpdate.setCreationDate(question.getCreationDate());
-            questionToUpdate.setUserId(question.getUserId());
-            questionToUpdate.setImagePath(question.getImagePath());
-
+            questionToUpdate.setTitle(question.getTitle());
+            //questionToUpdate.setCreationDate(question.getCreationDate());
+            //questionToUpdate.setUserId(question.getUserId());
+            if (question.getImagePath() != null) {
+                questionToUpdate.setImagePath(question.getImagePath());
+            }
             return this.questionRepository.save(questionToUpdate);
         }else {
             return null;

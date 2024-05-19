@@ -14,7 +14,7 @@ import java.util.Collection;
 public class UserPrincipal implements UserDetails {
     private final Long userId;
     private final String username;
-    //@JsonIgnore
+    @JsonIgnore
     private final String password;
     private Collection<? extends GrantedAuthority> authorities;
     @Override

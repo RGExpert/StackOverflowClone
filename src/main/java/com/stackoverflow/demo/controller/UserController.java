@@ -1,8 +1,10 @@
 package com.stackoverflow.demo.controller;
 
 import com.stackoverflow.demo.entity.User;
+import com.stackoverflow.demo.securingweb.UserPrincipal;
 import com.stackoverflow.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +15,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @GetMapping("/principal")
+    @ResponseBody
+    public User getUserFromPrincipal(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        return this.userService.getUserById(userPrincipal.getUserId());
+    }
 
     @GetMapping("/getAll")
     @ResponseBody

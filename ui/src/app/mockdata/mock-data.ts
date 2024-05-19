@@ -6,7 +6,7 @@ let mockData = {
       "title": "How I jump irl?",
       "text": "Please help i dont know how to jump irl",
       "creationDate": "21/04/2024",
-      "path":"./assets/placeholder.jpg"
+      "imagePath":"./assets/placeholder.jpg"
     },
     {
       "qId": 2,
@@ -14,7 +14,7 @@ let mockData = {
       "title": "How I walk irl?",
       "text": "I walk know not",
       "creationDate": "21/04/2024",
-      "path":"./assets/placeholder.jpg"
+      "imagePath":"./assets/placeholder.jpg"
     }
   ],
   "users": [

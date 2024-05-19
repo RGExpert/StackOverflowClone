@@ -46,8 +46,7 @@ public class WebSecurityConfig {
                         sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> registry
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/auth/login", "/users/addUser").permitAll()
+                        .requestMatchers("/", "/auth/login", "/users/addUser", "/images/**").permitAll() // Allow access to images
                         .anyRequest().authenticated()
                 );
 

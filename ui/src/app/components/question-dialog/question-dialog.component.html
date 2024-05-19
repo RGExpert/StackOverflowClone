@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Add an question</h2>
+<h2 mat-dialog-title>Add a question</h2>
 <mat-dialog-content>
   <div>
     <p>Add a title</p>
@@ -6,8 +6,32 @@
   </div>
   <div>
     <p>Add a description</p>
-    <textarea class="dialog-textarea" style="resize: none; width: 25rem; height: 20rem;" matInput [(ngModel)]="data.text"></textarea>
+    <textarea class="dialog-textarea" style="resize: none; width: 25rem; height: 20rem;" matInput
+              [(ngModel)]="data.text"></textarea>
   </div>
+  <div>
+    <p>Add an image</p>
+    <input type="file" (change)="onFileSelected($event)">
+  </div>
+  <mat-form-field class="chip-list">
+    <mat-label>Tags</mat-label>
+    <mat-chip-grid #chipGrid aria-label="Enter Chips">
+      <ng-container *ngFor="let tag of data.tags">
+        <mat-chip-row (removed)="remove(tag)" [editable]="true" (edited)="edit(tag, $event)"
+                      [aria-description]="'press enter to edit ' + tag.tagName">
+          {{tag.tagName}}
+          <button matChipRemove [attr.aria-label]="'remove ' + tag.tagName">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+      </ng-container>
+      <input placeholder="New Tag..."
+             [matChipInputFor]="chipGrid"
+             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+             [matChipInputAddOnBlur]="addOnBlur"
+             (matChipInputTokenEnd)="add($event)"/>
+    </mat-chip-grid>
+  </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Never mind</button>

@@ -27,7 +27,7 @@ export class LoginViewComponent {
   hide = true;
   username: string = '';
   password: string = '';
-  sessionToken: any = ""
+  token: string = ""
   constructor(
     private router: Router,
     private http: HttpClient
@@ -41,10 +41,11 @@ export class LoginViewComponent {
       password: this.password
     }).subscribe(res =>{
       if(res){
-        this.sessionToken = res.accessToken
-        sessionStorage.setItem(
+        this.token = res.accessToken
+        console.log(this.token)
+        localStorage.setItem(
           'token',
-          this.sessionToken
+          this.token
         );
         this.router.navigate(['/home']);
       } else {
