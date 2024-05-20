@@ -26,8 +26,15 @@ import {Answer} from "../../models/answer";
 export class AnswerDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<AnswerDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: string,
+    @Inject(MAT_DIALOG_DATA) public data: {text: string, selectedFile: File | null},
   ) {}
+
+  onFileSelected(event: any) {
+    const files: FileList = event.target.files;
+    if (files && files.length > 0) {
+      this.data.selectedFile = files[0];
+    }
+  }
 
   onNoClick() {
     this.dialogRef.close(null);

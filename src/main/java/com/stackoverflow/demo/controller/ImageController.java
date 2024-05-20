@@ -40,13 +40,12 @@ public class ImageController {
 
     private MediaType getImageMediaType(String imageName) {
         String extension = imageName.substring(imageName.lastIndexOf('.') + 1).toLowerCase();
-        if (extension.equals("png")) {
-            return MediaType.IMAGE_PNG;
-        } else if (extension.equals("jpeg") || extension.equals("jpg")) {
-            return MediaType.IMAGE_JPEG;
-        } else {
-            return MediaType.APPLICATION_OCTET_STREAM;
-        }
+        return switch (extension) {
+            case "png" -> MediaType.IMAGE_PNG;
+            case "jpeg", "jpg" -> MediaType.IMAGE_JPEG;
+            case "gif" -> MediaType.IMAGE_GIF;
+            default -> MediaType.APPLICATION_OCTET_STREAM;
+        };
     }
 
     @PostMapping("/upload")

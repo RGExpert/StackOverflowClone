@@ -39,7 +39,7 @@ public class AnswerController {
 
     @DeleteMapping("/deleteAnswer")
     @ResponseBody
-    public String deleteAnswer(@RequestParam Long id){
-        return this.answerService.deleteAnswerById(id);
+    public void deleteAnswer(@RequestParam Long id){
+        this.answerService.deleteAnswerById(id);
     }
 }

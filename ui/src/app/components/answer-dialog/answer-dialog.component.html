@@ -2,8 +2,12 @@
 <mat-dialog-content>
     <textarea class="dialog-textarea"
               style="resize: none;width: 25rem;height: 20rem;"
-              matInput [(ngModel)]="data">
+              matInput [(ngModel)]="data.text">
     </textarea>
+  <div>
+    <p>Add an image</p>
+    <input type="file" (change)="onFileSelected($event)">
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Never mind</button>

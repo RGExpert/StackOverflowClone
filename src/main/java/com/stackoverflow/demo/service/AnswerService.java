@@ -13,39 +13,40 @@ public class AnswerService {
     @Autowired
     private AnswerRepository answerRepository;
 
-    public List<Answer> getAnswersByQuestionId(Long id){
+    public List<Answer> getAnswersByQuestionId(Long id) {
         return this.answerRepository.findAnswersByQuestionId(id);
     }
 
-    public List<Answer> getAllAnswers(){
+    public List<Answer> getAllAnswers() {
         return (List<Answer>) this.answerRepository.findAll();
     }
 
-    public Answer addAnswer(Answer answer){
+    public Answer addAnswer(Answer answer) {
         return this.answerRepository.save(answer);
     }
 
-    public Answer updateAnswer(Answer answer,Long id){
+    public Answer updateAnswer(Answer answer, Long id) {
         Optional<Answer> answerDb = this.answerRepository.findById(id);
 
-        if(answerDb.isPresent()){
+        if (answerDb.isPresent()) {
             Answer answerToUpdate = answerDb.get();
-
             answerToUpdate.setText(answer.getText());
-            answerToUpdate.setImagePath(answer.getImagePath());
 
+            if (answer.getImagePath() != null) {
+                answerToUpdate.setImagePath(answer.getImagePath());
+            }
             return this.answerRepository.save(answerToUpdate);
-        } else{
+        } else {
             return null;
         }
     }
 
-    public String deleteAnswerById(Long id){
+    public void deleteAnswerById(Long id) {
         try {
             this.answerRepository.deleteById(id);
-            return "Successfully deleted";
+            //return "Successfully deleted";
         } catch (Exception e) {
-            return "Deletion failed";
+            //return "Deletion failed";
         }
     }
 }

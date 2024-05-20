@@ -30,7 +30,7 @@ export class NavbarComponent implements OnInit {
   }
 
   token: string | null = "";
-  tags: Tag[] | undefined;
+  tags: Tag[] = [];
 
   currentUser: User | undefined;
 
@@ -93,7 +93,7 @@ export class NavbarComponent implements OnInit {
           .then(() => {
             this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
               this.router.navigate(["/questions"]);
-            });;
+            });
           })
       }
     });
@@ -103,8 +103,5 @@ export class NavbarComponent implements OnInit {
     this.imageService.setHttpClient(this.http);
     this.token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
-    this.http.get<Tag[]>("http://localhost:8080/tags/getAll", {headers}).subscribe(res => {
-      this.tags = res as Tag[];
-    })
   }
 }

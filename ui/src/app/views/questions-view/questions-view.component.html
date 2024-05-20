@@ -8,7 +8,7 @@
 </div>
 
 <mat-card *ngFor="let question of filteredQuestions" class="question-card">
-  <img [src]="question.safeUrl" alt="Question Image" class="question-image">
+  <img *ngIf ="question.safeUrl" [src]="question.safeUrl" alt="Question Image" class="question-image">
   <mat-card-header>
     <mat-card-title>{{ question.title }}</mat-card-title>
     <mat-card-subtitle>{{ question.creationDate }}</mat-card-subtitle>

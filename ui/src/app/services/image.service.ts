@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {Question} from "../models/question";
+import {Answer} from "../models/answer";
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +47,16 @@ export class ImageService {
       }
     });
     //console.log(questions)
+  }
+
+  loadAnswerImages(answers: Answer[]):void{
+    answers.forEach(answer =>{
+      if(answer.imagePath){
+      this.loadImage(answer.imagePath).subscribe(
+        safeUrl =>
+          answer.safeUrl=safeUrl
+      )}
+    })
   }
 
   uploadImage(file: File | null, headers: any): String | null {
