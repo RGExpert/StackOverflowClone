@@ -49,4 +49,8 @@ public class AnswerService {
             //return "Deletion failed";
         }
     }
+
+    public Integer getOverallRating(Long qId){
+        return this.answerRepository.getOverallRating(qId);
+    }
 }

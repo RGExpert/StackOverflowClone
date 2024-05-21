@@ -42,4 +42,10 @@ public class AnswerController {
     public void deleteAnswer(@RequestParam Long id){
         this.answerService.deleteAnswerById(id);
     }
+
+    @GetMapping("/getRating/{id}")
+    @ResponseBody
+    public Integer getOverallRating(@PathVariable Long id){
+        return this.answerService.getOverallRating(id);
+    }
 }

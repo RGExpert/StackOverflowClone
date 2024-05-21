@@ -2,6 +2,7 @@ package com.stackoverflow.demo.service;
 
 import com.stackoverflow.demo.entity.Question;
 import com.stackoverflow.demo.repository.QuestionRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +44,9 @@ public class QuestionService {
         }else {
             return null;
         }
+    }
+    public Integer getOverallRating(Long qId){
+        return this.questionRepository.getOverallRating(qId);
     }
 
     public String deleteQuestionById(Long id){

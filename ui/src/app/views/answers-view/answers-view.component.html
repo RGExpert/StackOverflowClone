@@ -14,11 +14,12 @@
     <div class="tags">
       <mat-chip *ngFor="let tag of question.tags">{{ tag.tagName }}</mat-chip>
     </div>
-    <mat-card-actions style>
-      <button mat-button>
+    <mat-card-actions class="actions">
+      <button mat-button (click)="postLike(question)" [ngClass]="{ 'selected': question.userRating == true }">
         <mat-icon>thumb_up</mat-icon>
       </button>
-      <button mat-button>
+      <span>{{ question.overallRating }}</span>
+      <button mat-button (click)="postDisLike(question)" [ngClass]="{ 'selected': question.userRating == false}">
         <mat-icon>thumb_down</mat-icon>
       </button>
       <button mat-raised-button (click)="openDialog()">Answer!</button>
@@ -48,11 +49,12 @@
     <mat-card-content>
       <p>{{ answer.text }}</p>
     </mat-card-content>
-    <mat-card-actions>
-      <button mat-button>
+    <mat-card-actions class="actions">
+      <button mat-button (click)="postLikeAnswer(answer)" [ngClass]="{ 'selected': answer.userRating == true }">
         <mat-icon>thumb_up</mat-icon>
       </button>
-      <button mat-button>
+      <span>{{ answer.overallRating }}</span>
+      <button mat-button (click)="postDisLikeAnswer(answer)" [ngClass]="{ 'selected': answer.userRating == false}">
         <mat-icon>thumb_down</mat-icon>
       </button>
     </mat-card-actions>

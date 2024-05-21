@@ -23,7 +23,6 @@ import {MatChipsModule} from '@angular/material/chips';
 import {FormsModule} from "@angular/forms";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {User} from "../../models/user";
-import {resolve} from "@angular/compiler-cli";
 
 @Component({
   selector: 'app-questions-view',
@@ -89,9 +88,17 @@ export class QuestionsViewComponent implements OnInit, OnChanges {
           this.questions = res as Question[];
           this.questions = await Promise.all(
             this.questions.map(async (question: Question) => {
+
               question.creationDate = <string>this.datePipe.transform(question.creationDate, 'medium');
-              const url = `http://localhost:8080/tags/GetForQid/${question.qid}`;
-              question.tags = await lastValueFrom(this.http.get<Tag[]>(url, {headers}));
+              const urlTags = `http://localhost:8080/tags/GetForQid/${question.qid}`;
+              question.tags = await lastValueFrom(this.http.get<Tag[]>(urlTags, {headers}));
+
+              const urlRating = `http://localhost:8080/questions/getRating/${question.qid}`;
+              question.overallRating = await lastValueFrom(this.http.get<number>(urlRating, {headers}));
+
+              const urlUserRating = `http://localhost:8080/users/userQuestionRating/${question.qid}`;
+              question.userRating = await lastValueFrom(this.http.get<Boolean | null>(urlUserRating, {headers}));
+              //console.log(question.userRating);
               return question;
             })
           );
@@ -166,14 +173,9 @@ export class QuestionsViewComponent implements OnInit, OnChanges {
 
         const currentDate: Date = new Date();
         const formattedDate: string = currentDate.toISOString().replace(/\.\d{3}Z$/, '');
-        //console.log(this.token);
 
         this.currentUser = await lastValueFrom(this.http.get<User>('http://localhost:8080/users/principal', {headers}))
-        //console.log(this.currentUser);
         let uid = this.currentUser.id;
-        //console.log(uid);
-
-        //console.log("selectedFile: ", result.selectedFile)
 
         let image_path;
         if (result.selectedFile) {
@@ -196,7 +198,7 @@ export class QuestionsViewComponent implements OnInit, OnChanges {
             return this.http.post(url, result.tags.map((tag: Tag) => tag.tagName), {headers}).toPromise();
           })
           .then(() => {
-            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
               this.router.navigate([this.location.path()]);
             });
           })
@@ -206,4 +208,35 @@ export class QuestionsViewComponent implements OnInit, OnChanges {
   }
 
 
+  postLike(question: Question) {
+    const url = `http://localhost:8080/users/updateQuestionRating/${question.qid}`;
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+    this.http.put(url,
+      {
+        rating: (question.userRating == true) ? null : true
+      },
+      {headers}).subscribe(res => {
+      if (question.overallRating != undefined) {
+        question.overallRating = (question.userRating == true) ? question.overallRating - 1 : (question.userRating == false) ? question.overallRating + 2 : question.overallRating + 1;
+      }
+      question.userRating = (question.userRating == true) ? null : true;
+    });
+  }
+
+  postDisLike(question: Question) {
+    const url = `http://localhost:8080/users/updateQuestionRating/${question.qid}`;
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+    this.http.put(url,
+      {
+        rating: (question.userRating == false) ? null : false
+      },
+      {headers}).subscribe(res => {
+      if (question.overallRating != undefined) {
+        question.overallRating = (question.userRating == false) ? question.overallRating + 1 : (question.userRating == true) ? question.overallRating - 2 : question.overallRating - 1;
+      }
+      question.userRating = (question.userRating == false) ? null : false;
+    });
+  }
 }

@@ -12,4 +12,8 @@ export interface Question {
   imagePath:string | null;
   safeUrl? : SafeUrl;
   tags?: Tag[];
+
+  overallRating?: number;
+
+  userRating?:Boolean | null;
 }

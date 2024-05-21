@@ -21,3 +21,23 @@
   max-width: 200px;
 }
 
+.actions {
+  display: flex;
+  align-items: center;
+}
+
+.actions button {
+  margin: 0 5px;
+}
+
+.question-actions span {
+  min-width: 20px;
+  text-align: center;
+}
+
+button.selected mat-icon {
+  color: #3f51b5;
+}
+
+
+

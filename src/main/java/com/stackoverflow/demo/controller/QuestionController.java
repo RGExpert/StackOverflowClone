@@ -1,8 +1,11 @@
 package com.stackoverflow.demo.controller;
 
+import com.stackoverflow.demo.controller.dto.RatingRequest;
 import com.stackoverflow.demo.entity.Question;
+import com.stackoverflow.demo.securingweb.UserPrincipal;
 import com.stackoverflow.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,7 +37,6 @@ public class QuestionController {
     @PutMapping("/updateQuestion")
     @ResponseBody
     public Question updateQuestion(@RequestBody Question question){
-        //System.out.println(question.getQId());
         return this.questionService.updateQuestion(question);
     }
 
@@ -42,5 +44,11 @@ public class QuestionController {
     @ResponseBody
     public String deleteQuestion(@RequestParam Long id){
         return this.questionService.deleteQuestionById(id);
+    }
+
+    @GetMapping("/getRating/{id}")
+    @ResponseBody
+    public Integer getOverallRating(@PathVariable Long id){
+        return this.questionService.getOverallRating(id);
     }
 }

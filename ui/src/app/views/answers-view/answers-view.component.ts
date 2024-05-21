@@ -16,6 +16,7 @@ import {ImageService} from "../../services/image.service";
 import {MatChip} from "@angular/material/chips";
 import {Tag} from "../../models/tags";
 import {translateExpression} from "@angular/compiler-cli/src/ngtsc/translator";
+import {lastValueFrom} from "rxjs";
 
 
 @Component({
@@ -89,6 +90,21 @@ export class AnswersViewComponent implements OnInit {
                 }
               );
             }
+
+            const urlRating = `http://localhost:8080/questions/getRating/${this.question.qid}`;
+            this.http.get<number>(urlRating, {headers}).subscribe(res => {
+              if (this.question) {
+                this.question.overallRating = res;
+              }
+            })
+
+            const urlUserRating = `http://localhost:8080/users/userQuestionRating/${this.question.qid}`;
+            this.http.get<Boolean | null>(urlUserRating, {headers}).subscribe(res => {
+              if (this.question) {
+                this.question.userRating = res;
+              }
+            });
+
             const url_answers = `http://localhost:8080/answers/question/${this.question.qid}`;
             this.http.get<Answer[]>(url_answers, {headers}).subscribe(
               res => {
@@ -100,6 +116,19 @@ export class AnswersViewComponent implements OnInit {
                   };
                 });
                 this.imageService.loadAnswerImages(this.answers);
+
+                this.answers.forEach(answer => {
+                  const urlRating = `http://localhost:8080/answers/getRating/${answer.answerId}`;
+                  this.http.get<number>(urlRating, {headers}).subscribe(res => {
+                    answer.overallRating = res
+                  });
+
+                  const urlUserRating = `http://localhost:8080/users/userAnswerRating/${answer.answerId}`;
+                  this.http.get<Boolean | null>(urlUserRating, {headers}).subscribe(res => {
+                    answer.userRating = res;
+                  });
+                })
+
                 console.log(this.answers);
               }
             )
@@ -206,7 +235,7 @@ export class AnswersViewComponent implements OnInit {
 
         this.http.put("http://localhost:8080/answers/updateAnswer",
           {
-            answerId:answer.answerId,
+            answerId: answer.answerId,
             userId: this.currentUser,
             imagePath: image_path,
             currentDate: formattedDate,
@@ -215,13 +244,75 @@ export class AnswersViewComponent implements OnInit {
           },
           {headers})
           .subscribe(res => {
-            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-              this.router.navigate(['/questions', this.question?.qid]);
-            })
-          }
-        )
+              this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                this.router.navigate(['/questions', this.question?.qid]);
+              })
+            }
+          )
         ;
       }
     });
+  }
+
+  postLike(question: Question) {
+    const url = `http://localhost:8080/users/updateQuestionRating/${question.qid}`;
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+    this.http.put(url,
+      {
+        rating: (question.userRating == true) ? null : true
+      },
+      {headers}).subscribe(res => {
+      if (question.overallRating != undefined) {
+        question.overallRating = (question.userRating == true) ? question.overallRating - 1 : (question.userRating == false) ? question.overallRating + 2 : question.overallRating + 1;
+      }
+      question.userRating = (question.userRating == true) ? null : true;
+    });
+  }
+
+  postDisLike(question: Question) {
+    const url = `http://localhost:8080/users/updateQuestionRating/${question.qid}`;
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+    this.http.put(url,
+      {
+        rating: (question.userRating == false) ? null : false
+      },
+      {headers}).subscribe(res => {
+      if (question.overallRating != undefined) {
+        question.overallRating = (question.userRating == false) ? question.overallRating + 1 : (question.userRating == true) ? question.overallRating - 2 : question.overallRating - 1;
+      }
+      question.userRating = (question.userRating == false) ? null : false;
+    });
+  }
+
+  postLikeAnswer(answer: Answer) {
+    const url = `http://localhost:8080/users/updateAnswerRating/${answer.answerId}`;
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+    this.http.put(url,
+      {
+        rating: (answer.userRating == true) ? null : true
+      },
+      {headers}).subscribe(res => {
+      if (answer.overallRating != undefined) {
+        answer.overallRating = (answer.userRating == true) ? answer.overallRating - 1 : (answer.userRating == false) ? answer.overallRating + 2 : answer.overallRating + 1;
+      }
+      answer.userRating = (answer.userRating == true) ? null : true;
+    })
+  }
+
+  postDisLikeAnswer(answer: Answer) {
+    const url = `http://localhost:8080/users/updateAnswerRating/${answer.answerId}`;
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+    this.http.put(url,
+      {
+        rating: (answer.userRating == false) ? null : false
+      },
+      {headers}).subscribe(res => {
+      if (answer.overallRating != undefined) {
+        answer.overallRating = (answer.userRating == false) ? answer.overallRating + 1 : (answer.userRating == true) ? answer.overallRating - 2 : answer.overallRating - 1;;
+      }
+      answer.userRating = (answer.userRating == false) ? null : false;
+    })
   }
 }

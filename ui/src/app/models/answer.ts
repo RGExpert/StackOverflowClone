@@ -12,4 +12,7 @@ export interface Answer {
   text: string;
   safeUrl? : SafeUrl;
   creationDate: string;
+  overallRating?: number;
+
+  userRating?:Boolean | null;
 }

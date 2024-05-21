@@ -1,5 +1,6 @@
 package com.stackoverflow.demo.controller;
 
+import com.stackoverflow.demo.controller.dto.RatingRequest;
 import com.stackoverflow.demo.entity.User;
 import com.stackoverflow.demo.securingweb.UserPrincipal;
 import com.stackoverflow.demo.service.UserService;
@@ -53,10 +54,34 @@ public class UserController {
     }
 
 
-
     @DeleteMapping("/deleteUser")
     @ResponseBody
     public String deleteUser(@RequestParam Long id){
         return this.userService.deleteUserById(id);
     }
+
+    @GetMapping("/userQuestionRating/{id}")
+    @ResponseBody
+    public Boolean getUserRatingForQuestion(@PathVariable Long id,@AuthenticationPrincipal UserPrincipal userPrincipal){
+        return this.userService.getUserRating(id,userPrincipal.getUserId(),0);
+    }
+
+    @GetMapping("/userAnswerRating/{id}")
+    @ResponseBody
+    public Boolean getUserRatingForAnswer(@PathVariable Long id, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        return this.userService.getUserRating(id,userPrincipal.getUserId(),1);
+    }
+
+    @PutMapping("/updateQuestionRating/{id}")
+    @ResponseBody
+    public void addQuestionRating(@RequestBody RatingRequest ratingRequest,@PathVariable Long id,@AuthenticationPrincipal UserPrincipal userPrincipal){
+        this.userService.addRating(0,ratingRequest.getRating(),id,userPrincipal.getUserId());
+    }
+
+    @PutMapping("/updateAnswerRating/{id}")
+    @ResponseBody
+    public void addAnswerRating(@RequestBody RatingRequest ratingRequest,@PathVariable Long id,@AuthenticationPrincipal UserPrincipal userPrincipal){
+        this.userService.addRating(1,ratingRequest.getRating(),id,userPrincipal.getUserId());
+    }
+
 }
