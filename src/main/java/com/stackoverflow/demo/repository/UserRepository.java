@@ -65,5 +65,14 @@ public interface UserRepository extends CrudRepository<User, Long> {
     nativeQuery = true)
     Double getUserScore(@Param("userId") Long userId);
 
+    @Query(value = "SELECT\n" +
+            "    banned\n" +
+            "FROM\n" +
+            "    user_app\n" +
+            "WHERE\n" +
+            "    u_id = :userId",
+    nativeQuery = true)
+    Boolean getBannedStatus(@Param("userId") Long userId);
+
 
 }

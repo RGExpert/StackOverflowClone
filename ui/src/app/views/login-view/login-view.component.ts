@@ -7,6 +7,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {FormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
+import {CommonModule} from "@angular/common";
 
 @Component({
   selector: 'app-login-view',
@@ -18,6 +19,7 @@ import {HttpClient} from "@angular/common/http";
     MatInputModule,
     MatIconModule,
     FormsModule,
+    CommonModule,
   ],
   templateUrl: './login-view.component.html',
   styleUrl: './login-view.component.css'
@@ -28,6 +30,8 @@ export class LoginViewComponent {
   username: string = '';
   password: string = '';
   token: string = ""
+
+  banned: Boolean | undefined;
   constructor(
     private router: Router,
     private http: HttpClient
@@ -41,13 +45,17 @@ export class LoginViewComponent {
       password: this.password
     }).subscribe(res =>{
       if(res){
+        console.log(res);
         this.token = res.accessToken
-        console.log(this.token)
+        this.banned = res.banned;
         localStorage.setItem(
           'token',
           this.token
         );
-        this.router.navigate(['/home']);
+
+        if(!this.banned) {
+          this.router.navigate(['/home']);
+        }
       } else {
         console.log("Authentication failed"); // Maybe do something else here
       }

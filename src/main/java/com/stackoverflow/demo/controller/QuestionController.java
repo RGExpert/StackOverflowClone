@@ -6,6 +6,7 @@ import com.stackoverflow.demo.securingweb.UserPrincipal;
 import com.stackoverflow.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,14 +37,15 @@ public class QuestionController {
 
     @PutMapping("/updateQuestion")
     @ResponseBody
-    public Question updateQuestion(@RequestBody Question question){
-        return this.questionService.updateQuestion(question);
+    public Question updateQuestion(@RequestBody Question question, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        //System.out.println(userPrincipal.getAuthorities());
+        return this.questionService.updateQuestion(question,userPrincipal.getUserId(), (List<SimpleGrantedAuthority>) userPrincipal.getAuthorities());
     }
 
     @DeleteMapping("/deleteQuestion")
     @ResponseBody
-    public String deleteQuestion(@RequestParam Long id){
-        return this.questionService.deleteQuestionById(id);
+    public String deleteQuestion(@RequestParam Long id,@AuthenticationPrincipal UserPrincipal userPrincipal){
+        return this.questionService.deleteQuestionById(id,userPrincipal.getUserId(),(List<SimpleGrantedAuthority>) userPrincipal.getAuthorities());
     }
 
     @GetMapping("/getRating/{id}")

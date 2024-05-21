@@ -32,4 +32,5 @@ public class Answer {
 
     @Column(name = "image_path")
     private String imagePath;
+
 }

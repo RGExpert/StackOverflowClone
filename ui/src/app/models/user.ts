@@ -7,4 +7,6 @@ export interface User {
   joinDate:string
   role: Role;
   score?: number;
+  banned?: number;
+  email?:string;
 }

@@ -64,6 +64,7 @@ export class AnswersViewComponent implements OnInit {
       this.http.get<User>('http://localhost:8080/users/principal', {headers})
         .subscribe(res => {
           this.currentUser = res as User;
+          console.log(res);
         });
 
       if (this.qId) {
@@ -160,10 +161,11 @@ export class AnswersViewComponent implements OnInit {
                 });
               }
             )
-            console.log(this.answers);
+            //console.log(this.answers);
           }
         )
-        console.log(this.filteredAnswers);
+
+        //console.log(this.filteredAnswers);
       }
 
 

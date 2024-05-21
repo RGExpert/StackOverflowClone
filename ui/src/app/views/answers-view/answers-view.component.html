@@ -34,11 +34,11 @@
         {{ answer.userId.userName }} : {{answer.userId.score}}
       </mat-card-subtitle>
       <div class="delete-button">
-        <button *ngIf="answer.userId.userId === currentUser?.userId" mat-icon-button (click)="deleteAnswer(answer)">
+        <button *ngIf="(answer.userId.userId === currentUser?.userId) || currentUser?.role?.roleName === 'ADMIN'" mat-icon-button (click)="deleteAnswer(answer)">
           <mat-icon>close</mat-icon>
         </button>
 
-        <button *ngIf="answer.userId.userId === currentUser?.userId" mat-icon-button (click)="updateAnswer(answer)">
+        <button *ngIf="(answer.userId.userId === currentUser?.userId) || currentUser?.role?.roleName === 'ADMIN'" mat-icon-button (click)="updateAnswer(answer)">
           <mat-icon>edit</mat-icon>
         </button>
       </div>

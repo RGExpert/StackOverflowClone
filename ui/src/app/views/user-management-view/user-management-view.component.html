@@ -1,0 +1,28 @@
+<app-navbar></app-navbar>
+
+<mat-card *ngFor = "let user of users" class="user-card">
+
+  <mat-card-header>
+    <mat-card-title>{{user.userName}}</mat-card-title>
+    <button  mat-icon-button
+            (click)="banUser(user)">
+      <mat-icon>do_not_disturb</mat-icon>
+    </button>
+    <button  mat-icon-button
+             (click)="unBanUser(user)">
+      <mat-icon>check</mat-icon>
+    </button>
+  </mat-card-header>
+
+  <mat-card-content>
+    <p>User Id: {{user.userId}}</p>
+    <p>User Join Date: {{user.joinDate}}</p>
+    <p>Banned: {{user.banned}}</p>
+    <p>Email: {{user.email}}</p>
+  </mat-card-content>
+
+  <mat-card-actions>
+
+  </mat-card-actions>
+
+</mat-card>

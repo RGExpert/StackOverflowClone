@@ -13,12 +13,12 @@
     <mat-card-title>{{ question.title }}</mat-card-title>
     <mat-card-subtitle>{{ question.creationDate }}</mat-card-subtitle>
     <div class="delete-button">
-      <button *ngIf="currentUser && question.userId?.userName === currentUser.userName" mat-icon-button
+      <button *ngIf="currentUser && (question.userId?.userName === currentUser.userName || currentUser.role.roleName === 'ADMIN')" mat-icon-button
               (click)="deleteQuestion(question)">
         <mat-icon>close</mat-icon>
       </button>
 
-      <button *ngIf="currentUser && question.userId?.userName === currentUser.userName" mat-icon-button
+      <button *ngIf="currentUser && (question.userId?.userName === currentUser.userName || currentUser.role.roleName === 'ADMIN')" mat-icon-button
               (click)="updateQuestion(question)">
         <mat-icon>edit</mat-icon>
       </button>

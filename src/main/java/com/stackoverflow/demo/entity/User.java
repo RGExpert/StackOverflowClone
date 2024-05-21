@@ -24,11 +24,16 @@ public class User {
     @Column(name = "user_name")
     private String userName;
 
-    @JsonIgnore
     @Column(name = "password")
     private String password;
 
     @Column(name = "join_date")
     private Timestamp joinDate;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "banned")
+    private Integer banned;
 
 }

@@ -10,12 +10,13 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {lastValueFrom} from "rxjs";
 import {ImageService} from "../../services/image.service";
 import {Tag} from "../../models/tags";
+import {CommonModule, NgIf} from "@angular/common";
 
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [MatToolbarModule, MatButtonModule, MatIconModule],
+    imports: [MatToolbarModule, MatButtonModule, MatIconModule, CommonModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -110,5 +111,9 @@ export class NavbarComponent implements OnInit {
     });
     this.imageService.setHttpClient(this.http);
 
+  }
+
+  navigateToAllUsersPage() {
+    this.router.navigate(['/users']);
   }
 }

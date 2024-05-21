@@ -44,13 +44,14 @@ public class UserController {
     @PostMapping("/addUser")
     @ResponseBody
     public User addUser(@RequestBody User user){
+        System.out.println(user.getEmail());
         return this.userService.addUser(user);
     }
 
-    @PutMapping("/updateUser")
+    @PutMapping("/updateUser/{id}")
     @ResponseBody
-    public User updateUser(@RequestBody User user){
-        return this.userService.updateUser(user,user.getUserId());
+    public User updateUser(@PathVariable("id") Long userId,@RequestBody Integer bannedStatus){
+        return this.userService.updateUser(bannedStatus,userId);
     }
 
 

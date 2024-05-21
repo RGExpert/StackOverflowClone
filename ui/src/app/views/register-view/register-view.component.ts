@@ -28,6 +28,7 @@ export class RegisterViewComponent {
   username: any;
   password: any;
   confirmPassword: any;
+  email:any;
 
   constructor(
     private router: Router,
@@ -42,6 +43,7 @@ export class RegisterViewComponent {
       userName: this.username,
       password: this.password,
       joinDate: formattedDate,
+      email:this.email,
       role: {
         roleId: 1,
         roleName: "USER"

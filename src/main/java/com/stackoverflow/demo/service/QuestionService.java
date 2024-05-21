@@ -2,8 +2,8 @@ package com.stackoverflow.demo.service;
 
 import com.stackoverflow.demo.entity.Question;
 import com.stackoverflow.demo.repository.QuestionRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,10 +28,14 @@ public class QuestionService {
         return this.questionRepository.save(question);
     }
 
-    public Question updateQuestion(Question question){
+    public Question updateQuestion(Question question, Long userId, List<SimpleGrantedAuthority> authorities){
         Optional<Question> questionDb = this.questionRepository.findById(question.getQId());
         if(questionDb.isPresent()){
             Question questionToUpdate = questionDb.get();
+            if (questionToUpdate.getUserId().getUserId() != userId
+            && !authorities.contains(new SimpleGrantedAuthority("ADMIN"))){
+                return  null;
+            }
 
             questionToUpdate.setText(question.getText());
             questionToUpdate.setTitle(question.getTitle());
@@ -49,8 +53,14 @@ public class QuestionService {
         return this.questionRepository.getOverallRating(qId);
     }
 
-    public String deleteQuestionById(Long id){
+    public String deleteQuestionById(Long id, Long userId, List<SimpleGrantedAuthority> authorities){
         try {
+            Optional<Question> questionDb = this.questionRepository.findById(id);
+            if(questionDb.isPresent()){
+                if(userId != questionDb.get().getUserId().getUserId() && !authorities.contains(new SimpleGrantedAuthority("ADMIN")) ){
+                    return null;
+                }
+            }
             this.questionRepository.deleteById(id);
             return "Successfully deleted";
         } catch (Exception e) {

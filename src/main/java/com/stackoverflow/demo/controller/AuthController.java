@@ -5,6 +5,7 @@ import com.stackoverflow.demo.model.LoginRequest;
 import com.stackoverflow.demo.model.LoginResponse;
 import com.stackoverflow.demo.securingweb.JWTIssuer;
 import com.stackoverflow.demo.securingweb.UserPrincipal;
+import com.stackoverflow.demo.service.UserService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class AuthController {
     private final JWTIssuer jwtIssuer;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private final AuthenticationManager authenticationManager;
 
     @GetMapping("/secured")
@@ -41,6 +45,7 @@ public class AuthController {
 
     @PostMapping("/auth/login")
     public LoginResponse login(@RequestBody @Validated LoginRequest request){
+
         var authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword())
         );
@@ -53,8 +58,17 @@ public class AuthController {
                 .toList();
 
         var token = jwtIssuer.issue(principal.getUserId(),principal.getUsername(),roles);
+
+        if (this.userService.getBannedStatus(principal.getUserId())){
+            return LoginResponse.builder()
+                    .accessToken("")
+                    .banned(Boolean.TRUE)
+                    .build();
+        }
+
         return LoginResponse.builder()
                 .accessToken(token)
+                .banned(Boolean.FALSE)
                 .build();
     }
 }

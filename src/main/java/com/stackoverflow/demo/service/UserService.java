@@ -35,19 +35,18 @@ public class UserService {
     }
 
     public User addUser(User user) {
+        user.setBanned(0);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return this.userRepository.save(user);
     }
 
     @Transactional
-    public User updateUser(User user, Long id) {
+    public User updateUser(Integer newBannedStatus, Long id) {
         Optional<User> userDb = this.userRepository.findById(id);
         if (userDb.isPresent()) {
             User userToUpdate = userDb.get();
 
-            userToUpdate.setUserName(user.getUserName());
-            userToUpdate.setRole(user.getRole());
-            userToUpdate.setPassword(user.getPassword());
+            userToUpdate.setBanned(newBannedStatus);
 
             return this.userRepository.save(userToUpdate);
         } else {
@@ -103,6 +102,10 @@ public class UserService {
 
     public Double getUserScore(Long uId){
         return this.userRepository.getUserScore(uId);
+    }
+
+    public Boolean getBannedStatus(Long userId){
+        return this.userRepository.getBannedStatus(userId);
     }
 
 
