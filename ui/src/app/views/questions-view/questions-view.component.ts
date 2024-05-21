@@ -175,7 +175,7 @@ export class QuestionsViewComponent implements OnInit, OnChanges {
         const formattedDate: string = currentDate.toISOString().replace(/\.\d{3}Z$/, '');
 
         this.currentUser = await lastValueFrom(this.http.get<User>('http://localhost:8080/users/principal', {headers}))
-        let uid = this.currentUser.id;
+        let uid = this.currentUser.userId;
 
         let image_path;
         if (result.selectedFile) {

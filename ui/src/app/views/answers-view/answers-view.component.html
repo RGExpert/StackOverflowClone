@@ -5,7 +5,7 @@
     <mat-card-header>
       <mat-card-title>{{ question.title }}</mat-card-title>
       <mat-card-subtitle class="pointer" (click)="goToUserPage(question.userId)">
-        {{ getUserNameQuestion(question.userId?.id) }}</mat-card-subtitle>
+        {{ question.userId?.userName }} : {{question.userId?.score}}</mat-card-subtitle>
       <mat-card-subtitle>{{ question.formattedCreationDate }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
@@ -31,14 +31,14 @@
     <img *ngIf="answer.safeUrl" [src]="answer.safeUrl" alt="Question Image" class="question-image">
     <mat-card-header>
       <mat-card-subtitle class="pointer" (click)="goToUserPage(answer.userId)">
-        {{ getUserNameAnswer(answer.userId) }}
+        {{ answer.userId.userName }} : {{answer.userId.score}}
       </mat-card-subtitle>
       <div class="delete-button">
-        <button *ngIf="answer.userId.id === currentUser?.id" mat-icon-button (click)="deleteAnswer(answer)">
+        <button *ngIf="answer.userId.userId === currentUser?.userId" mat-icon-button (click)="deleteAnswer(answer)">
           <mat-icon>close</mat-icon>
         </button>
 
-        <button *ngIf="answer.userId.id === currentUser?.id" mat-icon-button (click)="updateAnswer(answer)">
+        <button *ngIf="answer.userId.userId === currentUser?.userId" mat-icon-button (click)="updateAnswer(answer)">
           <mat-icon>edit</mat-icon>
         </button>
       </div>

@@ -4,37 +4,65 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatCardModule} from "@angular/material/card";
 import {ActivatedRoute} from "@angular/router";
 import {User} from "../../models/user";
-import mockData from "../../mockdata/mock-data";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {DatePipe} from "@angular/common";
+import {Answer} from "../../models/answer";
 
 
 @Component({
   selector: 'app-user-view',
   standalone: true,
-  imports: [NavbarComponent,MatCardModule, MatButtonModule],
+  imports: [NavbarComponent, MatCardModule, MatButtonModule],
   templateUrl: './user-view.component.html',
-  styleUrl: './user-view.component.css'
+  styleUrl: './user-view.component.css',
+  providers: [
+    DatePipe
+  ],
 })
-export class UserViewComponent implements OnInit{
+export class UserViewComponent implements OnInit {
 
   userId: string | null = null;
   userName: string | null = null;
   id: number | null = null;
   joinDate: string | null = null;
+  token: string | null = null;
+  currentUser: User | null = null;
 
-  currentUser : User | null = null;
-  constructor(private route: ActivatedRoute) { }
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private datePipe: DatePipe,
+  ) {
+  }
+
   ngOnInit(): void {
-    const userIdString = localStorage.getItem('userId');
+    this.token = localStorage.getItem('token');
 
+    // this.route.paramMap.subscribe(params => {
+    //   this.userId = params.get('userId');
+    //
+    // });
     this.route.paramMap.subscribe(params => {
-      this.userId = params.get('userId');
+      const id = params.get('userId');
+      console.log(id);
+
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+      const url =  `http://localhost:8080/users/getById/${id}`;
+      this.http.get<User>(url, {headers})
+        .subscribe(res => {
+          this.currentUser = res as User;
+          this.currentUser.joinDate = <string>this.datePipe.transform(this.currentUser.joinDate, 'medium');
+
+          const userScoreUrl = `http://localhost:8080/users/getUserScore/${this.currentUser.userId}`
+          this.http.get<number>(userScoreUrl, {headers})
+            .subscribe(res => {
+              if (this.currentUser) {
+                this.currentUser.score = res;
+              }
+            })
+        });
 
     });
-
-    if (this.userId != null) {
-      const userIdNumber = parseInt(this.userId, 10);
-      this.currentUser = <User>mockData.users.find(u => u.id ==userIdNumber);
-    }
 
   }
 }

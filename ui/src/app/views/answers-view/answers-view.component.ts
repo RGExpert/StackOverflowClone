@@ -16,7 +16,7 @@ import {ImageService} from "../../services/image.service";
 import {MatChip} from "@angular/material/chips";
 import {Tag} from "../../models/tags";
 import {translateExpression} from "@angular/compiler-cli/src/ngtsc/translator";
-import {lastValueFrom} from "rxjs";
+import {forkJoin, lastValueFrom} from "rxjs";
 
 
 @Component({
@@ -41,6 +41,7 @@ export class AnswersViewComponent implements OnInit {
   question: Question | undefined;
   currentUser: User | undefined;
   answers: Answer[] = [];
+  filteredAnswers: Answer[] = [];
   users: User[] = [];
   qId: number | undefined;
   token: string | null = null;
@@ -70,7 +71,18 @@ export class AnswersViewComponent implements OnInit {
         this.http.get<Question>(url, {headers}).subscribe(
           res => {
             this.question = res as Question;
+            if (this.question.userId) {
+              const userScoreUrl = `http://localhost:8080/users/getUserScore/${this.question.userId.userId}`;
+              this.http.get<number>(userScoreUrl, {headers}).subscribe(
+                res => {
+                  if (this.question && this.question.userId) {
+                    this.question.userId.score = res as number
+                  }
+                }
+              )
+            }
             this.question.formattedCreationDate = <string>this.datePipe.transform(this.question.creationDate, 'medium');
+
 
             const url_tags = `http://localhost:8080/tags/GetForQid/${this.question.qid}`;
             this.http.get<Tag[]>(url_tags, {headers}).subscribe(
@@ -117,26 +129,45 @@ export class AnswersViewComponent implements OnInit {
                 });
                 this.imageService.loadAnswerImages(this.answers);
 
+
                 this.answers.forEach(answer => {
                   const urlRating = `http://localhost:8080/answers/getRating/${answer.answerId}`;
-                  this.http.get<number>(urlRating, {headers}).subscribe(res => {
-                    answer.overallRating = res
-                  });
-
                   const urlUserRating = `http://localhost:8080/users/userAnswerRating/${answer.answerId}`;
-                  this.http.get<Boolean | null>(urlUserRating, {headers}).subscribe(res => {
-                    answer.userRating = res;
-                  });
-                })
+                  const userScoreUrl = `http://localhost:8080/users/getUserScore/${answer.userId.userId}`;
 
-                console.log(this.answers);
+                  const ratingRequest = this.http.get<number>(urlRating, {headers});
+                  const userRatingRequest = this.http.get<Boolean | null>(urlUserRating, {headers});
+                  const userScoreUrlRequest = this.http.get<number>(userScoreUrl, {headers});
+
+                  forkJoin([ratingRequest, userRatingRequest, userScoreUrlRequest]).subscribe(([ratingRes, userRatingRes, userScoreUrlRequest]) => {
+                    answer.overallRating = ratingRes;
+                    answer.userRating = userRatingRes;
+                    answer.userId.score = userScoreUrlRequest;
+
+                    this.answers.sort((answerA, answerB) => {
+                      if (answerA.overallRating != null && answerB.overallRating != null) {
+                        return answerB.overallRating - answerA.overallRating;
+                      } else if (answerA.overallRating != null) {
+                        return -1;
+                      } else if (answerB.overallRating != null) {
+                        return 1;
+                      } else {
+                        return 0;
+                      }
+                    });
+
+                  });
+                });
               }
             )
+            console.log(this.answers);
           }
         )
+        console.log(this.filteredAnswers);
       }
-    });
 
+
+    });
 
   }
 
@@ -151,7 +182,8 @@ export class AnswersViewComponent implements OnInit {
 
   goToUserPage(user: User | undefined) {
     if (user) {
-      this.router.navigate(['/user', user.id]);
+      console.log(user);
+      this.router.navigate(['/user', user.userId]);
     }
   }
 
@@ -310,9 +342,12 @@ export class AnswersViewComponent implements OnInit {
       },
       {headers}).subscribe(res => {
       if (answer.overallRating != undefined) {
-        answer.overallRating = (answer.userRating == false) ? answer.overallRating + 1 : (answer.userRating == true) ? answer.overallRating - 2 : answer.overallRating - 1;;
+        answer.overallRating = (answer.userRating == false) ? answer.overallRating + 1 : (answer.userRating == true) ? answer.overallRating - 2 : answer.overallRating - 1;
+        ;
       }
       answer.userRating = (answer.userRating == false) ? null : false;
     })
   }
+
+
 }

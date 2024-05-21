@@ -39,8 +39,11 @@ export class NavbarComponent implements OnInit {
   }
 
   navigateToUserPage() {
-    const userId = localStorage.getItem('userId');
-    this.router.navigate(['/user', userId]);
+    console.log(this.currentUser)
+    if(this.currentUser){
+      console.log(this.currentUser)
+      this.router.navigate(['/user', this.currentUser.userId]);
+    }
   }
 
   navigateToQuestionsPage() {
@@ -70,8 +73,7 @@ export class NavbarComponent implements OnInit {
         //console.log(this.token);
 
         this.currentUser = await lastValueFrom(this.http.get<User>('http://localhost:8080/users/principal', {headers}))
-        //console.log(this.currentUser);
-        let uid = this.currentUser.id;
+        //console.log(this.currentUser);;
         //console.log(uid);
 
         //console.log("selectedFile: ", result.selectedFile)
@@ -100,8 +102,13 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.imageService.setHttpClient(this.http);
     this.token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+
+    this.http.get<User>('http://localhost:8080/users/principal', {headers}).subscribe(res =>{
+      this.currentUser = res
+    });
+    this.imageService.setHttpClient(this.http);
+
   }
 }

@@ -38,5 +38,32 @@ public interface UserRepository extends CrudRepository<User, Long> {
             nativeQuery = true)
     void updateRating(@Param("rating") Integer rating, @Param("post_id") Long qId, @Param("user_id")Long uId,@Param("new_rating") Integer newRating);
 
+    @Query(value = "SELECT\n" +
+            "    2.5 * COUNT(CASE WHEN pr.rating = 1 AND pr.post_type = 0 THEN 1 END) +\n" +
+            "    5.0 * COUNT(CASE WHEN pr.rating = 1 AND pr.post_type = 1 THEN 1 END) -\n" +
+            "    1.5 * COUNT(CASE WHEN pr.rating = 0 AND pr.post_type = 0 THEN 1 END) -\n" +
+            "    2.5 * COUNT(CASE WHEN pr.rating = 0 AND pr.post_type = 1 THEN 1 END) -\n" +
+            "    1.5 * (SELECT COUNT(*)\n" +
+            "           FROM\n" +
+            "            answer a1 JOIN post_rating p on p.post_type=1 and a1.a_id = p.post_id\n" +
+            "            WHERE\n" +
+            "                p.u_id = :userId\n" +
+            "                AND\n" +
+            "                a1.u_id != :userId\n" +
+            "                AND\n" +
+            "                p.rating = 0\n" +
+            "           )\n" +
+            "FROM\n" +
+            "    post_rating pr\n" +
+            "\n" +
+            "LEFT OUTER JOIN answer a2 on pr.post_id = a2.a_id\n" +
+            "LEFT OUTER JOIN question q on pr.post_id = q.q_id\n" +
+            "WHERE\n" +
+            "    (a2.u_id  = :userId AND pr.post_type = 1)\n" +
+            "    OR\n" +
+            "    (q.u_id = :userId AND pr.post_type = 0)",
+    nativeQuery = true)
+    Double getUserScore(@Param("userId") Long userId);
+
 
 }

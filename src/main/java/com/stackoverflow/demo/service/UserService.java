@@ -66,7 +66,7 @@ public class UserService {
 
     public Boolean getUserRating(Long qId, Long uId, Integer postType) {
         Integer queryResult = this.userRepository.getUserRating(qId, uId, postType);
-        System.out.println(queryResult);
+        //System.out.println(queryResult);
         if (queryResult == null) {
             return null;
         }
@@ -100,6 +100,11 @@ public class UserService {
             this.userRepository.addRating(postType, intRating, id, uId);
         }
     }
+
+    public Double getUserScore(Long uId){
+        return this.userRepository.getUserScore(uId);
+    }
+
 
 
 }

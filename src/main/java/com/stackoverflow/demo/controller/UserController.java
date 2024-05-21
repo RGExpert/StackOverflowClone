@@ -84,4 +84,10 @@ public class UserController {
         this.userService.addRating(1,ratingRequest.getRating(),id,userPrincipal.getUserId());
     }
 
+    @GetMapping("/getUserScore/{id}")
+    @ResponseBody
+    public Double getUserScore(@PathVariable("id") Long userId){
+        return this.userService.getUserScore(userId);
+    }
+
 }
