@@ -1,6 +1,5 @@
 package com.stackoverflow.demo.controller;
 
-import com.stackoverflow.demo.controller.dto.RatingRequest;
 import com.stackoverflow.demo.entity.Question;
 import com.stackoverflow.demo.securingweb.UserPrincipal;
 import com.stackoverflow.demo.service.QuestionService;
@@ -38,7 +37,6 @@ public class QuestionController {
     @PutMapping("/updateQuestion")
     @ResponseBody
     public Question updateQuestion(@RequestBody Question question, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        //System.out.println(userPrincipal.getAuthorities());
         return this.questionService.updateQuestion(question,userPrincipal.getUserId(), (List<SimpleGrantedAuthority>) userPrincipal.getAuthorities());
     }
 

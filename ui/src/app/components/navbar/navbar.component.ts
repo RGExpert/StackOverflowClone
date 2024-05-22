@@ -71,13 +71,9 @@ export class NavbarComponent implements OnInit {
 
         const currentDate: Date = new Date();
         const formattedDate: string = currentDate.toISOString().replace(/\.\d{3}Z$/, '');
-        //console.log(this.token);
 
         this.currentUser = await lastValueFrom(this.http.get<User>('http://localhost:8080/users/principal', {headers}))
-        //console.log(this.currentUser);;
-        //console.log(uid);
 
-        //console.log("selectedFile: ", result.selectedFile)
         let image_path = this.imageService.uploadImage(result.selectedFile, headers)
 
         await lastValueFrom(this.http.post("http://localhost:8080/questions/addQuestion",
@@ -115,5 +111,10 @@ export class NavbarComponent implements OnInit {
 
   navigateToAllUsersPage() {
     this.router.navigate(['/users']);
+  }
+
+  logout() {
+    localStorage.clear()
+    this.router.navigate(['/login'])
   }
 }

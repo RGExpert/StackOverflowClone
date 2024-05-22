@@ -2,7 +2,6 @@ package com.stackoverflow.demo.securingweb;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.stackoverflow.demo.entity.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

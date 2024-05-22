@@ -38,10 +38,6 @@ export class UserViewComponent implements OnInit {
   ngOnInit(): void {
     this.token = localStorage.getItem('token');
 
-    // this.route.paramMap.subscribe(params => {
-    //   this.userId = params.get('userId');
-    //
-    // });
     this.route.paramMap.subscribe(params => {
       const id = params.get('userId');
       console.log(id);

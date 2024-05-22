@@ -2,7 +2,6 @@ package com.stackoverflow.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Generated;
 import lombok.NoArgsConstructor;
 
 @Entity

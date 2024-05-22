@@ -12,7 +12,7 @@ import {Answer} from "../models/answer";
 export class ImageService {
 
   private apiUrl = 'http://localhost:8080/images';
-  private httpClient: HttpClient | undefined; // Store HttpClient instance
+  private httpClient: HttpClient | undefined;
 
   constructor(private sanitizer: DomSanitizer) {
   }
@@ -46,7 +46,6 @@ export class ImageService {
         );
       }
     });
-    //console.log(questions)
   }
 
   loadAnswerImages(answers: Answer[]):void{

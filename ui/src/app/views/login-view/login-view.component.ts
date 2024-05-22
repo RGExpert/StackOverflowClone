@@ -61,4 +61,8 @@ export class LoginViewComponent {
       }
     })
   }
+
+  redirectToRegister() {
+    this.router.navigate(['/register'])
+  }
 }
