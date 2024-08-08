@@ -11,6 +11,7 @@ create table stackoverflow.role
 
 create table stackoverflow.tag
 (
+
     t_id     bigint unsigned auto_increment
         primary key,
     tag_name varchar(255) not null,
