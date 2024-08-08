@@ -4,7 +4,7 @@ export interface User {
   userId?: number;
   userName: string;
   password: string;
-  joinDate: string
+  joinDate: string;
   role: Role;
   score?: number;
   banned?: number;

@@ -7,62 +7,54 @@ import {MatIconModule} from "@angular/material/icon";
 import {FormsModule} from "@angular/forms";
 import {User} from "../../models/user";
 import {Router} from "@angular/router";
-import {HttpClient} from "@angular/common/http";
+import {RegisterService} from "../../services/register.service";
 
 @Component({
-  selector: 'app-register-view',
-  standalone: true,
-  imports: [
-    MatCardModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
-    FormsModule,
-  ],
-  templateUrl: './register-view.component.html',
-  styleUrl: './register-view.component.css'
+    selector: 'app-register-view',
+    standalone: true,
+    imports: [
+        MatCardModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatIconModule,
+        FormsModule,
+    ],
+    templateUrl: './register-view.component.html',
+    styleUrl: './register-view.component.css'
 })
 
 export class RegisterViewComponent {
+    username: string = "";
+    password: string = "";
+    confirmPassword: string = "";
+    email: string = "";
 
-  username: string = "";
-  password: string = "";
-  confirmPassword: string = "";
-  email: string = "";
+    constructor(
+        private router: Router,
+        private registerService: RegisterService,
+    ) { }
 
-  constructor(
-    private router: Router,
-    private http: HttpClient
-  ) { }
+    user: User | undefined;
+    register(): void {
+        this.user =  <User>{
+            userName: this.username,
+            password: this.password,
+            joinDate: "",
+            email: this.email,
+            role: {
+                roleId: 1,
+                roleName: "USER"
+            }
+        }
 
-  user: User | undefined;
-  register() {
-    const currentDate: Date = new Date();
-    const formattedDate: string = currentDate.toISOString().replace(/\.\d{3}Z$/, '');
-    this.user =  {
-      userName: this.username,
-      password: this.password,
-      joinDate: formattedDate,
-      email:this.email,
-      role: {
-        roleId: 1,
-        roleName: "USER"
-      }
+        this.registerService.register(this.user)
+            .subscribe( response =>{
+                if(response){
+                    this.router.navigate(['/login']);
+                } else {
+                    console.log("User creation error");
+                }
+            });
     }
-
-    const url = 'http://localhost:8080/users/addUser'
-
-    this.http.post<any>(
-      url,
-      this.user
-    ).subscribe( res =>{
-      if(res){
-        this.router.navigate(['/login']);
-      }else {
-        console.log("User creation error");
-      }
-    });
-
-  }
 }
