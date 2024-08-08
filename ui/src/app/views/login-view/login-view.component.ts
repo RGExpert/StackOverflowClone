@@ -39,12 +39,12 @@ export class LoginViewComponent {
     login(){
         this.loginService.login(this.username, this.password)
             .subscribe(response =>{
+                console.log(`Login response: ${JSON.stringify(response,null, '\n')}`)
                 if(response){
                     localStorage.setItem(
                         'token',
                         response.accessToken,
                     );
-
                     this.banned = response.banned
                     if(!response.banned) {
                         this.router.navigate(['/home']);
@@ -52,7 +52,7 @@ export class LoginViewComponent {
                 } else {
                     console.log("Authentication failed");
                 }
-            })
+            });
     }
 
     redirectToRegister() {
