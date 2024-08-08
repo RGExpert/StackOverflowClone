@@ -56,7 +56,6 @@ export class QuestionDialogComponent {
   }
 
   onSubmit() {
-    //console.log(this.data);
     this.dialogRef.close(this.data);
   }
 
@@ -65,12 +64,10 @@ export class QuestionDialogComponent {
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
-    // Add our fruit
     if (value) {
       this.data.tags.push({tagName: value});
     }
 
-    // Clear the input value
     event.chipInput!.clear();
   }
 

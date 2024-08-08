@@ -98,7 +98,6 @@ export class QuestionsViewComponent implements OnInit, OnChanges {
 
               const urlUserRating = `http://localhost:8080/users/userQuestionRating/${question.qid}`;
               question.userRating = await lastValueFrom(this.http.get<Boolean | null>(urlUserRating, {headers}));
-              //console.log(question.userRating);
               return question;
             })
           );
@@ -234,7 +233,9 @@ export class QuestionsViewComponent implements OnInit, OnChanges {
       },
       {headers}).subscribe(res => {
       if (question.overallRating != undefined) {
-        question.overallRating = (question.userRating == false) ? question.overallRating + 1 : (question.userRating == true) ? question.overallRating - 2 : question.overallRating - 1;
+        question.overallRating = (question.userRating == false)?
+          question.overallRating + 1 : (question.userRating == true)?
+            question.overallRating - 2 : question.overallRating - 1;
       }
       question.userRating = (question.userRating == false) ? null : false;
     });

@@ -5,7 +5,7 @@
     <mat-card-header>
       <mat-card-title>{{ question.title }}</mat-card-title>
       <mat-card-subtitle class="pointer" (click)="goToUserPage(question.userId)">
-        {{ question.userId?.userName }} : {{question.userId?.score}}</mat-card-subtitle>
+        {{ question.userId.userName }} : {{question.userId.score}}</mat-card-subtitle>
       <mat-card-subtitle>{{ question.formattedCreationDate }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>

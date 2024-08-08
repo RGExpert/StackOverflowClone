@@ -40,9 +40,7 @@ export class NavbarComponent implements OnInit {
   }
 
   navigateToUserPage() {
-    console.log(this.currentUser)
     if(this.currentUser){
-      console.log(this.currentUser)
       this.router.navigate(['/user', this.currentUser.userId]);
     }
   }
@@ -53,7 +51,6 @@ export class NavbarComponent implements OnInit {
 
   addNewQuestion() {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
-    //console.log(this.tags);
 
     const dialogRef = this.dialog.open(QuestionDialogComponent, {
       data: {

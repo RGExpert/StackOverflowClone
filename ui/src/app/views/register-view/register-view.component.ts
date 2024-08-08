@@ -25,10 +25,11 @@ import {HttpClient} from "@angular/common/http";
 })
 
 export class RegisterViewComponent {
-  username: any;
-  password: any;
-  confirmPassword: any;
-  email:any;
+
+  username: string = "";
+  password: string = "";
+  confirmPassword: string = "";
+  email: string = "";
 
   constructor(
     private router: Router,
@@ -50,7 +51,7 @@ export class RegisterViewComponent {
       }
     }
 
-    let url = 'http://localhost:8080/users/addUser'
+    const url = 'http://localhost:8080/users/addUser'
 
     this.http.post<any>(
       url,

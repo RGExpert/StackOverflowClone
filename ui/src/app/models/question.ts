@@ -4,13 +4,13 @@ import {Tag} from "./tags";
 
 export interface Question {
   formattedCreationDate?:string,
-  qid? : number;
-  userId?: User;
+  qid : number;
+  userId: User;
   title: string ;
   text: string;
   creationDate: string;
   imagePath:string | null;
-  safeUrl? : SafeUrl;
+  safeUrl : SafeUrl;
   tags?: Tag[];
 
   overallRating?: number;

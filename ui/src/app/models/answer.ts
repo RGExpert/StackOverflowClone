@@ -3,16 +3,16 @@ import {User} from "./user";
 import {SafeUrl} from "@angular/platform-browser";
 
 export interface Answer {
-  answerId? : number;
+  answerId : number;
   questionId: Question;
   userId:User;
   authorId?: number ;
   imagePath:string | null;
-  qid?:number;
+  qid:number;
   text: string;
-  safeUrl? : SafeUrl;
+  safeUrl : SafeUrl;
   creationDate: string;
-  overallRating?: number;
+  overallRating: number;
 
-  userRating?:Boolean | null;
+  userRating:Boolean | null;
 }

@@ -1,10 +1,10 @@
 import {Role} from "./role";
 
 export interface User {
-  userId?: number
+  userId?: number;
   userName: string;
-  password:string;
-  joinDate:string
+  password: string;
+  joinDate: string
   role: Role;
   score?: number;
   banned?: number;

@@ -6,7 +6,6 @@ import {CommonModule, DatePipe} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
 import {Question} from "../../models/question";
 import {ActivatedRoute, Router} from "@angular/router";
-import mockData from "../../mockdata/mock-data";
 import {Answer} from "../../models/answer";
 import {User} from "../../models/user";
 import {AnswerDialogComponent} from "../../components/answer-dialog/answer-dialog.component";
@@ -15,7 +14,6 @@ import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {ImageService} from "../../services/image.service";
 import {MatChip} from "@angular/material/chips";
 import {Tag} from "../../models/tags";
-import {translateExpression} from "@angular/compiler-cli/src/ngtsc/translator";
 import {forkJoin, lastValueFrom} from "rxjs";
 
 
@@ -41,7 +39,6 @@ export class AnswersViewComponent implements OnInit {
   question: Question | undefined;
   currentUser: User | undefined;
   answers: Answer[] = [];
-  filteredAnswers: Answer[] = [];
   users: User[] = [];
   qId: number | undefined;
   token: string | null = null;
@@ -161,14 +158,8 @@ export class AnswersViewComponent implements OnInit {
                 });
               }
             )
-            //console.log(this.answers);
           }
-        )
-
-        //console.log(this.filteredAnswers);
-      }
-
-
+        )}
     });
 
   }

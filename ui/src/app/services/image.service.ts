@@ -51,10 +51,10 @@ export class ImageService {
   loadAnswerImages(answers: Answer[]):void{
     answers.forEach(answer =>{
       if(answer.imagePath){
-      this.loadImage(answer.imagePath).subscribe(
-        safeUrl =>
-          answer.safeUrl=safeUrl
-      )}
+        this.loadImage(answer.imagePath).subscribe(
+          safeUrl =>
+            answer.safeUrl=safeUrl
+        )}
     })
   }
 
