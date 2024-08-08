@@ -1,4 +1,4 @@
-import {Component, inject, input} from '@angular/core';
+import {Component} from '@angular/core';
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
 import {MatInputModule} from "@angular/material/input";
