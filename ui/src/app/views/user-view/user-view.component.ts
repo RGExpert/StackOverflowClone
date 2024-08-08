@@ -4,7 +4,6 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatCardModule} from "@angular/material/card";
 import {ActivatedRoute} from "@angular/router";
 import {User} from "../../models/user";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {DatePipe} from "@angular/common";
 import {UserService} from "../../services/user.service";
 
