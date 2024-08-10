@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import {User} from "../models/user";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Observable, switchMap} from "rxjs";
+import {mergeMap, Observable} from "rxjs";
 import {map} from "rxjs/operators";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class UserService {
     private urls: Map<string, string> = new  Map([
         ['getById', `http://localhost:8080/users/getById/{id}`],
-        ['getUserScore', `http://localhost:8080/users/getUserScore/{userScore}`]
+        ['getUserScore', `http://localhost:8080/users/getUserScore/{userScore}`],
+        ['getByPrincipal', 'http://localhost:8080/users/principal'],
     ]);
 
     private token: string | null = localStorage.getItem('token');
@@ -36,14 +37,17 @@ export class UserService {
 
     getUserByIdWithScore(id: number): Observable<User> {
         return this.getUserById(id).pipe(
-            switchMap(user =>
-                this.getUserScoreById(id).pipe(
-                    map(score => {
-                        user.score = score;
-                        return user;
-                    })
-                )
+            mergeMap((user: User) => this.getUserScoreById(user.userId!).pipe(
+                    map(score => { user.score = score; return user; })
+                ),
             )
+        )
+    }
+
+    getUserByPrincipal(): Observable<User> {
+        return this.http.get<User>(
+            this.urls.get('getByPrincipal')!,
+            {headers: this.httpHeaders}
         );
     }
 }

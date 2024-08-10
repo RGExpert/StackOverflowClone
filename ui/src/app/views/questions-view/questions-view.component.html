@@ -1,45 +1,45 @@
 <app-navbar></app-navbar>
 
 <div>
-  <input type="text" placeholder="Search by tag" [(ngModel)]="tagFilter" (input)="applyFilters()">
-  <input type="text" placeholder="Search by question title" [(ngModel)]="titleFilter" (input)="applyFilters()">
-  <input type="text" placeholder="Search by user" [(ngModel)]="userFilter" (input)="applyFilters()">
-  <mat-checkbox [(ngModel)]="showCurrentUserQuestions" (change)="applyFilters()">Show My Questions Only</mat-checkbox>
+    <input type="text" placeholder="Search by tag" [(ngModel)]="tagFilter" (input)="applyFilters()">
+    <input type="text" placeholder="Search by question title" [(ngModel)]="titleFilter" (input)="applyFilters()">
+    <input type="text" placeholder="Search by user" [(ngModel)]="userFilter" (input)="applyFilters()">
+    <mat-checkbox [(ngModel)]="showCurrentUserQuestions" (change)="applyFilters()">Show My Questions Only</mat-checkbox>
 </div>
 
 <mat-card *ngFor="let question of filteredQuestions" class="question-card">
-  <img *ngIf="question.safeUrl" [src]="question.safeUrl" alt="Question Image" class="question-image">
-  <mat-card-header>
-    <mat-card-title>{{ question.title }}</mat-card-title>
-    <mat-card-subtitle>{{ question.creationDate }}</mat-card-subtitle>
-    <div class="delete-button">
-      <button *ngIf="currentUser && (question.userId?.userName === currentUser.userName || currentUser.role.roleName === 'ADMIN')" mat-icon-button
-              (click)="deleteQuestion(question)">
-        <mat-icon>close</mat-icon>
-      </button>
+    <img *ngIf="question.safeUrl" [src]="question.safeUrl" alt="Question Image" class="question-image">
+    <mat-card-header>
+        <mat-card-title>{{ question.title }}</mat-card-title>
+        <mat-card-subtitle>{{ question.formattedCreationDate }}</mat-card-subtitle>
+        <div class="delete-button">
+            <button *ngIf="currentUser && (question.userId?.userName === currentUser.userName || currentUser.role.roleName === 'ADMIN')" mat-icon-button
+                    (click)="deleteQuestion(question)">
+                <mat-icon>close</mat-icon>
+            </button>
 
-      <button *ngIf="currentUser && (question.userId?.userName === currentUser.userName || currentUser.role.roleName === 'ADMIN')" mat-icon-button
-              (click)="updateQuestion(question)">
-        <mat-icon>edit</mat-icon>
-      </button>
+            <button *ngIf="currentUser && (question.userId?.userName === currentUser.userName || currentUser.role.roleName === 'ADMIN')" mat-icon-button
+                    (click)="updateQuestion(question)">
+                <mat-icon>edit</mat-icon>
+            </button>
+        </div>
+    </mat-card-header>
+    <mat-card-content>
+        <p>{{ question.text }}</p>
+    </mat-card-content>
+    <div class="tags">
+        <mat-chip *ngFor="let tag of question.tags">{{ tag.tagName }}</mat-chip>
     </div>
-  </mat-card-header>
-  <mat-card-content>
-    <p>{{ question.text }}</p>
-  </mat-card-content>
-  <div class="tags">
-    <mat-chip *ngFor="let tag of question.tags">{{ tag.tagName }}</mat-chip>
-  </div>
-  <mat-card-actions class="question-actions">
-    <button mat-button (click)="postLike(question)" [ngClass]="{ 'selected': question.userRating == true }">
-      <mat-icon>thumb_up</mat-icon>
-    </button>
-    <span>{{ question.overallRating }}</span>
-    <button mat-button (click)="postDisLike(question)" [ngClass]="{ 'selected': question.userRating == false}">
-      <mat-icon>thumb_down</mat-icon>
-    </button>
-    <button mat-button (click)="navigateToQuestion(question.qid)">
-      <mat-icon>chat_bubble</mat-icon>
-    </button>
-  </mat-card-actions>
+    <mat-card-actions class="question-actions">
+        <button mat-button (click)="postLike(question)" [ngClass]="{ 'selected': question.userRating == true }">
+            <mat-icon>thumb_up</mat-icon>
+        </button>
+        <span>{{ question.overallRating }}</span>
+        <button mat-button (click)="postDisLike(question)" [ngClass]="{ 'selected': question.userRating == false}">
+            <mat-icon>thumb_down</mat-icon>
+        </button>
+        <button mat-button (click)="navigateToQuestion(question.qid)">
+            <mat-icon>chat_bubble</mat-icon>
+        </button>
+    </mat-card-actions>
 </mat-card>
