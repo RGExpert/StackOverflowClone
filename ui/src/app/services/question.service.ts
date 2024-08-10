@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Question} from "../models/question";
 import { Tag} from "../models/tags";
 import {forkJoin, mergeAll, mergeMap, Observable, toArray} from "rxjs";
 import {map} from "rxjs/operators";
 import {DatePipe} from "@angular/common";
+import {User} from "../models/user";
 
 @Injectable({
     providedIn: 'root'
@@ -16,6 +17,9 @@ export class QuestionService {
         ['getTags', `http://localhost:8080/tags/GetForQid/{id}`],
         ['getRating', `http://localhost:8080/questions/getRating/{id}`],
         ['getUserRating', `http://localhost:8080/users/userQuestionRating/{id}`],
+        ['deleteQuestion', 'http://localhost:8080/questions/deleteQuestion'],
+        ['updateQuestion', 'http://localhost:8080/questions/updateQuestion'],
+        ['updateTags', `http://localhost:8080/tags/addTagsToQuestion/{id}`]
     ]);
 
     private token: string | null = localStorage.getItem('token');
@@ -77,6 +81,41 @@ export class QuestionService {
             toArray(),
         )
     }
+
+    deleteQuestion(qId: number) {
+        const params = new HttpParams().set('id', String(qId));
+        return this.http.delete(
+            this.urls.get('deleteQuestion')!,
+            {headers: this.httpHeaders, params: params}
+        )
+    }
+
+    updateQuestion(qId: number, currentUser: User, imagePath: String | null, title: string, text: string) {
+        const currentDate: Date = new Date();
+        const formattedDate: string = currentDate.toISOString().replace(/\.\d{3}Z$/, '');
+        return this.http.put(
+            this.urls.get('updateQuestion')!,
+            {
+                qid: qId,
+                userId: currentUser,
+                creationDate: formattedDate,
+                title: title,
+                text: text,
+                imagePath: imagePath,
+            },
+            {headers: this.httpHeaders}
+        )
+    }
+
+   updateTags(tags: Tag[], qId: number) {
+        return this.http.post(
+            this.urls.get('updateTags')!.replace('{id}', String(qId)),
+            tags.map(tag => tag.tagName),
+            {headers: this.httpHeaders}
+        )
+   }
+
+
 
 
 

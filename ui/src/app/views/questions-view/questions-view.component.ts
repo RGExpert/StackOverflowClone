@@ -110,6 +110,10 @@ export class QuestionsViewComponent implements OnInit, OnChanges {
 
             return tagMatch && titleMatch && userMatch && currentUserMatch;
         });
+
+        this.questions.sort((a: Question, b: Question) => {
+            return new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime();
+        });
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -118,65 +122,41 @@ export class QuestionsViewComponent implements OnInit, OnChanges {
 
     deleteQuestion(question: Question) {
         this.questions = this.questions.filter(q => q != question);
-        const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
-        let params;
-        if (question.qid) {
-            params = new HttpParams().set('id', question.qid?.toString());
-        }
-        this.http.delete("http://localhost:8080/questions/deleteQuestion", {headers, params}).subscribe(
-            res => {
-                console.log("Deletion successfully");
-            }
+        this.questionService.deleteQuestion(question.qid).subscribe(
+            () => console.log('Delete successful')
         )
         this.applyFilters();
 
     }
 
     updateQuestion(question: Question) {
-        const auxTags = question.tags?.map(tag => ({...tag}))
         const dialogRef = this.dialog.open(QuestionDialogComponent, {
             data: {
                 title: question.title,
                 text: question.text,
                 selectedFile: null,
-                tags: auxTags,
+                tags: question.tags,
             }
         });
-        const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+
         dialogRef.afterClosed().subscribe(async result => {
-            if (result && result.text != '' && result.title != '') {
-
-                const currentDate: Date = new Date();
-                const formattedDate: string = currentDate.toISOString().replace(/\.\d{3}Z$/, '');
-
-                this.currentUser = await lastValueFrom(this.http.get<User>('http://localhost:8080/users/principal', {headers}))
-
-                let image_path;
-                if (result.selectedFile) {
-                    image_path = this.imageService.uploadImage(result.selectedFile, headers)
-                }
-
-                await lastValueFrom(this.http.put("http://localhost:8080/questions/updateQuestion",
-                    {
-                        qid: question.qid,
-                        userId: this.currentUser,
-                        creationDate: formattedDate,
-                        title: result.title,
-                        text: result.text,
-                        imagePath: image_path,
-                    },
-                    {headers}))
-                    .then((questionResponse: any) => {
-                        const questionId = question.qid;
-                        const url = `http://localhost:8080/tags/addTagsToQuestion/${questionId}`;
-                        return this.http.post(url, result.tags.map((tag: Tag) => tag.tagName), {headers}).toPromise();
-                    })
-                    .then(() => {
-                        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                            this.router.navigate([this.location.path()]);
-                        });
-                    })
+            if (!result || result.text == '' || result.title == '') {
+                console.log("Invalid question")
+                return;
             }
+
+            const image_path: String | null = this.imageService.uploadImage(result.selectedFile, null);
+
+            await lastValueFrom(this.questionService.updateQuestion(question.qid, this.currentUser!, image_path, result.title, result.text))
+                .then(() => {
+                    this.questionService.updateTags(result.tags, question.qid).subscribe(
+                        () => {
+                            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                                this.router.navigate([this.location.path()]);
+                            });
+                        }
+                    )
+                })
         });
 
     }
