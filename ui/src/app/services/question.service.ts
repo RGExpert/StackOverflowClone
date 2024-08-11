@@ -66,8 +66,8 @@ export class QuestionService {
         return this.getAll().pipe(
             mergeAll(),
 
-            mergeMap(question =>
-                forkJoin({
+            mergeMap(question => {
+                return forkJoin({
                     tags: this.getTags(question.qid),
                     rating: this.getRating(question.qid),
                     userRating: this.getUserRating(question.qid)
@@ -78,7 +78,8 @@ export class QuestionService {
                         question.userRating = result.userRating;
                         question.formattedCreationDate = <string>this.datePipe.transform(question.creationDate, 'medium');
                         return question;
-                    }))),
+                    }));
+            }),
 
             toArray(),
         )
