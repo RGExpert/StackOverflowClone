@@ -13,13 +13,15 @@ import {User} from "../models/user";
 export class QuestionService {
 
     private urls: Map<string, string> = new  Map([
-        ['getAll', 'http://localhost:8080/questions/getAll'],
+        ['getAll','http://localhost:8080/questions/getAll'],
         ['getTags', `http://localhost:8080/tags/GetForQid/{id}`],
         ['getRating', `http://localhost:8080/questions/getRating/{id}`],
         ['getUserRating', `http://localhost:8080/users/userQuestionRating/{id}`],
         ['deleteQuestion', 'http://localhost:8080/questions/deleteQuestion'],
         ['updateQuestion', 'http://localhost:8080/questions/updateQuestion'],
-        ['updateTags', `http://localhost:8080/tags/addTagsToQuestion/{id}`]
+        ['updateTags', `http://localhost:8080/tags/addTagsToQuestion/{id}`],
+        ['postLike', `http://localhost:8080/users/updateQuestionRating/{id}`],
+        ['postDislike',`http://localhost:8080/users/updateQuestionRating/{id}`],
     ]);
 
     private token: string | null = localStorage.getItem('token');
@@ -113,6 +115,35 @@ export class QuestionService {
             tags.map(tag => tag.tagName),
             {headers: this.httpHeaders}
         )
+   }
+
+    postLike(question: Question) {
+        this.http.put(
+            this.urls.get('postLike')!.replace('{id}',String(question.qid)),
+            {rating: (question.userRating)? null : true},
+            {headers: this.httpHeaders}
+        ).subscribe(() => {
+                if (question.overallRating != undefined) {
+                    question.overallRating = (question.userRating == true) ? question.overallRating - 1 : (question.userRating == false) ? question.overallRating + 2 : question.overallRating + 1;
+                }
+                question.userRating = (question.userRating == true) ? null : true;
+            }
+        )
+   }
+
+   postDislike(question: Question) {
+       this.http.put(
+           this.urls.get('postDislike')!.replace('{id}', String(question.qid)),
+           { rating: (question.userRating == false) ? null : false },
+           {headers: this.httpHeaders})
+           .subscribe(() => {
+               if (question.overallRating != undefined) {
+                   question.overallRating = (question.userRating == false)?
+                       question.overallRating + 1 : (question.userRating == true)?
+                           question.overallRating - 2 : question.overallRating - 1;
+               }
+               question.userRating = (question.userRating == false) ? null : false;
+           });
    }
 
 

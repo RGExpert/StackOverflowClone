@@ -9,10 +9,9 @@ import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {QuestionDialogComponent} from "../../components/question-dialog/question-dialog.component";
 import {QuestionCardComponent} from "../../components/question-card/question-card.component";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import {HttpClient } from "@angular/common/http";
 import {ImageService} from "../../services/image.service";
 import {lastValueFrom} from "rxjs";
-import {Tag} from "../../models/tags";
 import {MatChipsModule} from '@angular/material/chips';
 import {FormsModule} from "@angular/forms";
 import {MatCheckbox} from "@angular/material/checkbox";
@@ -161,38 +160,11 @@ export class QuestionsViewComponent implements OnInit, OnChanges {
 
     }
 
-
     postLike(question: Question) {
-        const url = `http://localhost:8080/users/updateQuestionRating/${question.qid}`;
-
-        const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
-        this.http.put(url,
-            {
-                rating: (question.userRating == true) ? null : true
-            },
-            {headers}).subscribe(res => {
-            if (question.overallRating != undefined) {
-                question.overallRating = (question.userRating == true) ? question.overallRating - 1 : (question.userRating == false) ? question.overallRating + 2 : question.overallRating + 1;
-            }
-            question.userRating = (question.userRating == true) ? null : true;
-        });
+          this.questionService.postLike(question);
     }
 
     postDisLike(question: Question) {
-        const url = `http://localhost:8080/users/updateQuestionRating/${question.qid}`;
-
-        const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
-        this.http.put(url,
-            {
-                rating: (question.userRating == false) ? null : false
-            },
-            {headers}).subscribe(res => {
-            if (question.overallRating != undefined) {
-                question.overallRating = (question.userRating == false)?
-                    question.overallRating + 1 : (question.userRating == true)?
-                        question.overallRating - 2 : question.overallRating - 1;
-            }
-            question.userRating = (question.userRating == false) ? null : false;
-        });
+        this.questionService.postDislike(question)
     }
 }
