@@ -22,6 +22,7 @@ export class QuestionService {
         ['updateTags', `http://localhost:8080/tags/addTagsToQuestion/{id}`],
         ['postLike', `http://localhost:8080/users/updateQuestionRating/{id}`],
         ['postDislike',`http://localhost:8080/users/updateQuestionRating/{id}`],
+        ['getById', `http://localhost:8080/questions/getById/{id}`],
     ]);
 
     private token: string | null = localStorage.getItem('token');
@@ -62,28 +63,43 @@ export class QuestionService {
         )
     }
 
+    private getById(id: number):Observable<Question>{
+        return this.http.get<Question>(
+            this.urls.get('getById')!.replace('{id}', String(id)),
+            {headers: this.httpHeaders}
+        )
+    }
+
+    private populateQuestion(question: Question): Observable<Question> {
+        return forkJoin({
+            tags: this.getTags(question.qid),
+            rating: this.getRating(question.qid),
+            userRating: this.getUserRating(question.qid)
+        }).pipe(
+            map((result: { tags: Tag[]; rating: number; userRating: Boolean | null}) => {
+                question.tags = result.tags;
+                question.overallRating = result.rating;
+                question.userRating = result.userRating;
+                question.formattedCreationDate = <string>this.datePipe.transform(question.creationDate, 'medium');
+                return question;
+            })
+        );
+    }
+
+    getQuestionById(id: number): Observable<Question> {
+        return this.getById(id).pipe(
+            mergeMap(question => this.populateQuestion(question))
+        );
+    }
+
     getAllQuestions(): Observable<Question[]> {
         return this.getAll().pipe(
             mergeAll(),
-
-            mergeMap(question => {
-                return forkJoin({
-                    tags: this.getTags(question.qid),
-                    rating: this.getRating(question.qid),
-                    userRating: this.getUserRating(question.qid)
-                }).pipe(
-                    map(result => {
-                        question.tags = result.tags;
-                        question.overallRating = result.rating;
-                        question.userRating = result.userRating;
-                        question.formattedCreationDate = <string>this.datePipe.transform(question.creationDate, 'medium');
-                        return question;
-                    }));
-            }),
-
-            toArray(),
-        )
+            mergeMap(question => this.populateQuestion(question)),
+            toArray()
+        );
     }
+
 
     deleteQuestion(qId: number) {
         const params = new HttpParams().set('id', String(qId));
@@ -110,13 +126,13 @@ export class QuestionService {
         )
     }
 
-   updateTags(tags: Tag[], qId: number) {
+    updateTags(tags: Tag[], qId: number) {
         return this.http.post(
             this.urls.get('updateTags')!.replace('{id}', String(qId)),
             tags.map(tag => tag.tagName),
             {headers: this.httpHeaders}
         )
-   }
+    }
 
     postLike(question: Question) {
         this.http.put(
@@ -130,22 +146,22 @@ export class QuestionService {
                 question.userRating = (question.userRating == true) ? null : true;
             }
         )
-   }
+    }
 
-   postDislike(question: Question) {
-       this.http.put(
-           this.urls.get('postDislike')!.replace('{id}', String(question.qid)),
-           { rating: (question.userRating == false) ? null : false },
-           {headers: this.httpHeaders})
-           .subscribe(() => {
-               if (question.overallRating != undefined) {
-                   question.overallRating = (question.userRating == false)?
-                       question.overallRating + 1 : (question.userRating == true)?
-                           question.overallRating - 2 : question.overallRating - 1;
-               }
-               question.userRating = (question.userRating == false) ? null : false;
-           });
-   }
+    postDislike(question: Question) {
+        this.http.put(
+            this.urls.get('postDislike')!.replace('{id}', String(question.qid)),
+            { rating: (question.userRating == false) ? null : false },
+            {headers: this.httpHeaders})
+            .subscribe(() => {
+                if (question.overallRating != undefined) {
+                    question.overallRating = (question.userRating == false)?
+                        question.overallRating + 1 : (question.userRating == true)?
+                            question.overallRating - 2 : question.overallRating - 1;
+                }
+                question.userRating = (question.userRating == false) ? null : false;
+            });
+    }
 
 
 
