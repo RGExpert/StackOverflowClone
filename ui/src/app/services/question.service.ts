@@ -23,6 +23,8 @@ export class QuestionService {
         ['postLike', `http://localhost:8080/users/updateQuestionRating/{id}`],
         ['postDislike',`http://localhost:8080/users/updateQuestionRating/{id}`],
         ['getById', `http://localhost:8080/questions/getById/{id}`],
+        ['postQuestion', `http://localhost:8080/questions/addQuestion`],
+        ['postTags', `http://localhost:8080/tags/addTagsToQuestion/{id}`],
     ]);
 
     private token: string | null = localStorage.getItem('token');
@@ -106,6 +108,30 @@ export class QuestionService {
         return this.http.delete(
             this.urls.get('deleteQuestion')!,
             {headers: this.httpHeaders, params: params}
+        )
+    }
+    postQuestion(currentUser: User, imagePath: String | null, title: string, text: string, tags: Tag[]) {
+        const currentDate: Date = new Date();
+        const formattedDate: string = currentDate.toISOString().replace(/\.\d{3}Z$/, '');
+        return this.http.post(
+            this.urls.get('postQuestion')!,
+            {
+                userId: currentUser,
+                creationDate: formattedDate,
+                title: title,
+                text: text,
+                imagePath: imagePath,
+            },
+            {headers: this.httpHeaders}
+        ).pipe(
+            mergeMap((response) => {
+                const qid = (response as Question).qid
+                return this.http.post(
+                    this.urls.get('postTags')!.replace('{id}', String(qid)),
+                    tags.map(tag => tag.tagName),
+                    {headers: this.httpHeaders}
+                )
+            })
         )
     }
 
