@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+
+  mysql:
+    image: mysql:8
+    container_name: so-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: stackoverflow
+      MYSQL_USER: so_user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  app:
+    build: .
+    container_name: so-backend
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/stackoverflow
+      SPRING_DATASOURCE_USERNAME: so_user
+      SPRING_DATASOURCE_PASSWORD: password
+
+volumes:
+  mysql_data:

@@ -1,4 +1,4 @@
-create database stackoverflow
+USE stackoverflow;
 
 create table stackoverflow.role
 (
