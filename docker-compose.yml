@@ -28,6 +28,9 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/stackoverflow
       SPRING_DATASOURCE_USERNAME: so_user
       SPRING_DATASOURCE_PASSWORD: password
+      UPLOAD_PATH: /uploads
+    volumes:
+      - /uploads:/uploads
 
 volumes:
   mysql_data:
